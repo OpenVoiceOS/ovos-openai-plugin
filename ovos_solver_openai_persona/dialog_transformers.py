@@ -12,7 +12,7 @@ class OpenAIDialogTransformer(DialogTransformer):
             "key": self.config.get("key"),
             'api_url': self.config.get('api_url', 'https://api.openai.com/v1'),
             "enable_memory": False,
-            "initial_prompt": "your task is to rewrite text as if it was spoken by a different character"
+            "system_prompt": "Your task is to rewrite text as if it was spoken by a different character"
         })
 
     def transform(self, dialog: str, context: dict = None) -> Tuple[str, dict]:

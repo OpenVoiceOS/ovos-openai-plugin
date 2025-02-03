@@ -232,6 +232,7 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         Returns:
             Iterable[str]: An iterable of utterances.
         """
+        messages = [{"role": "system", "content": self.system_prompt }] + messages
         answer = ""
         query = messages[-1]["content"]
         if self.memory:
@@ -282,4 +283,7 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         """
         messages = self.get_messages(query)
         # just for api compat since it's a subclass, shouldn't be directly used
-        return self.continue_chat(messages=messages, lang=lang, units=units)
+        answer = self.continue_chat(messages=messages, lang=lang, units=units)
+        if not answer or not answer.strip("?") or not answer.strip("_"):
+            return None
+        return answer

@@ -1,61 +1,19 @@
-from typing import Optional, Iterable, List, Dict
-
 from ovos_solver_openai_persona.engines import OpenAIChatCompletionsSolver
-
-
-class OpenAIPersonaSolver(OpenAIChatCompletionsSolver):
-    """default "Persona" engine"""
-
-    def __init__(self, config=None):
-        # defaults to gpt-3.5-turbo
-        super().__init__(config=config)
-        self.system_prompt = config.get("system_prompt") or "You are a helpful assistant. You are creative, clever, and very friendly."
-
-    def get_chat_history(self, persona=None):
-        return super().get_chat_history(self.system_prompt)
-
-    # officially exported Solver methods
-    def get_spoken_answer(self, query: str,
-                          lang: Optional[str] = None,
-                          units: Optional[str] = None) -> Optional[str]:
-        """
-        Obtain the spoken answer for a given query.
-
-        Args:
-            query (str): The query text.
-            lang (Optional[str]): Optional language code. Defaults to None.
-            units (Optional[str]): Optional units for the query. Defaults to None.
-
-        Returns:
-            str: The spoken answer as a text response.
-        """
-        answer = super().get_spoken_answer(query, lang, units)
-        if not answer or not answer.strip("?") or not answer.strip("_"):
-            return None
-        return answer
-
-    def stream_chat_utterances(self, messages: List[Dict[str, str]],
-                               lang: Optional[str] = None,
-                               units: Optional[str] = None) -> Iterable[str]:
-        messages = [{"role": "system", "content": self.system_prompt }] + messages
-        answer = super().stream_chat_utterances(messages, lang, units)
-        yield from answer
 
 # for ovos-persona
 LLAMA_DEMO = {
   "name": "Remote LLama",
   "solvers": [
-    "ovos-solver-openai-plugin"
+    "ovos-solver-openai-persona-plugin"
   ],
-  "ovos-solver-openai-plugin": {
+  "ovos-solver-openai-persona-plugin": {
     "api_url": "https://llama.smartgic.io/v1",
     "key": "sk-xxxx"
   }
 }
 
-
 if __name__ == "__main__":
-    bot = OpenAIPersonaSolver(LLAMA_DEMO["ovos-solver-openai-plugin"])
+    bot = OpenAIChatCompletionsSolver(LLAMA_DEMO["ovos-solver-openai-persona-plugin"])
     #for utt in bot.stream_utterances("describe quantum mechanics in simple terms"):
     #    print(utt)
         #  Quantum mechanics is a branch of physics that studies the behavior of atoms and particles at the smallest scales.
