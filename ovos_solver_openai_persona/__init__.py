@@ -9,14 +9,10 @@ class OpenAIPersonaSolver(OpenAIChatCompletionsSolver):
     def __init__(self, config=None):
         # defaults to gpt-3.5-turbo
         super().__init__(config=config)
-        self.default_persona = config.get("persona") or "helpful, creative, clever, and very friendly."
+        self.system_prompt = config.get("system_prompt") or "You are a helpful assistant. You are creative, clever, and very friendly."
 
     def get_chat_history(self, persona=None):
-        persona = persona or self.default_persona
-        initial_prompt = f"You are a helpful assistant. " \
-                         f"You give short and factual answers. " \
-                         f"You are {persona}"
-        return super().get_chat_history(initial_prompt)
+        return super().get_chat_history(self.system_prompt)
 
     # officially exported Solver methods
     def get_spoken_answer(self, query: str,
@@ -41,11 +37,9 @@ class OpenAIPersonaSolver(OpenAIChatCompletionsSolver):
     def stream_chat_utterances(self, messages: List[Dict[str, str]],
                                lang: Optional[str] = None,
                                units: Optional[str] = None) -> Iterable[str]:
-        initial_prompt = self.default_persona
-        messages = [{"role": "system", "content": initial_prompt }] + messages
+        messages = [{"role": "system", "content": self.system_prompt }] + messages
         answer = super().stream_chat_utterances(messages, lang, units)
         yield from answer
-
 
 # for ovos-persona
 LLAMA_DEMO = {
