@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Iterable, List, Dict
 
 from ovos_solver_openai_persona.engines import OpenAIChatCompletionsSolver
 
@@ -37,6 +37,14 @@ class OpenAIPersonaSolver(OpenAIChatCompletionsSolver):
         if not answer or not answer.strip("?") or not answer.strip("_"):
             return None
         return answer
+
+    def stream_chat_utterances(self, messages: List[Dict[str, str]],
+                               lang: Optional[str] = None,
+                               units: Optional[str] = None) -> Iterable[str]:
+        initial_prompt = self.default_persona
+        messages = [{"role": "system", "content": initial_prompt }] + messages
+        answer = super().stream_chat_utterances(messages, lang, units)
+        yield from answer
 
 
 # for ovos-persona
