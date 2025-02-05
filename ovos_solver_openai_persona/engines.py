@@ -209,6 +209,7 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         Returns:
             Optional[str]: The generated response or None if no response could be generated.
         """
+        messages = [{"role": "system", "content": self.system_prompt }] + messages
         response = self._do_api_request(messages)
         answer = post_process_sentence(response)
         if not answer or not answer.strip("?") or not answer.strip("_"):

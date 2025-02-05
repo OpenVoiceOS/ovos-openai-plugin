@@ -1,4 +1,14 @@
+import warnings
 from ovos_solver_openai_persona.engines import OpenAIChatCompletionsSolver
+
+class OpenAIPersonaSolver(OpenAIChatCompletionsSolver):
+    def __init__(self, *args, **kwargs):
+           warnings.warn(
+              "use OpenAIChatCompletionsSolver instead",
+              DeprecationWarning,
+              stacklevel=2,
+           )
+           super().__init__(*args, **kwargs)
 
 # for ovos-persona
 LLAMA_DEMO = {
