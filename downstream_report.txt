@@ -1,3 +1,3 @@
-ovos-solver-openai-persona-plugin==1.2.0
-└── ovos-persona==0.6.12a2 [requires: ovos-solver-openai-persona-plugin>=1.1.1,<2.0.0]
-    └── ovos-core==0.5.3a1 [requires: ovos-persona>=0.4.4,<1.0.0]
+ovos-openai-plugin==2.0.0
+└── ovos-persona==0.6.16 [requires: ovos-openai-plugin>=2.0.0,<3.0.0]
+    └── ovos-core==1.2.3 [requires: ovos-persona>=0.4.4,<1.0.0]
