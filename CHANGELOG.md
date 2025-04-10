@@ -1,16 +1,16 @@
 # Changelog
 
-## [2.0.0a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.0a1) (2025-02-26)
+## [2.0.1a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.1a1) (2025-04-10)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/V1.2.0...2.0.0a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/V2.0.0...2.0.1a1)
 
-**Breaking changes:**
+**Merged pull requests:**
 
-- refactor!:rename package [\#22](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/22) ([JarbasAl](https://github.com/JarbasAl))
+- fix: params from config [\#24](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/24) ([JarbasAl](https://github.com/JarbasAl))
 
-## [V1.2.0](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/V1.2.0) (2025-02-05)
+## [V2.0.0](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/V2.0.0) (2025-02-26)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/1.2.0...V1.2.0)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.0...V2.0.0)
 
 
 
