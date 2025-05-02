@@ -18,7 +18,7 @@ To create your own persona using a OpenAI compatible server create a .json in `~
   "solvers": [
     "ovos-solver-openai-plugin"
   ],
-  "ovos-openai-plugin": {
+  "ovos-solver-openai-plugin": {
     "api_url": "https://llama.smartgic.io/v1",
     "key": "sk-xxxx",
     "system_prompt": "You are helping assistant who gives very short and factual answers in maximum twenty words and you don't use emojis"
