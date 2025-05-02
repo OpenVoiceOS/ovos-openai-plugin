@@ -3,6 +3,11 @@ from ovos_solver_openai_persona.engines import OpenAIChatCompletionsSolver
 
 class OpenAIPersonaSolver(OpenAIChatCompletionsSolver):
     def __init__(self, *args, **kwargs):
+           """
+           Initializes the solver and issues a deprecation warning.
+           
+           A DeprecationWarning is raised advising to use OpenAIChatCompletionsSolver instead.
+           """
            warnings.warn(
               "use OpenAIChatCompletionsSolver instead",
               DeprecationWarning,

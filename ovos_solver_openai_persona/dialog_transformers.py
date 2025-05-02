@@ -7,6 +7,11 @@ from ovos_solver_openai_persona import OpenAIChatCompletionsSolver
 
 class OpenAIDialogTransformer(DialogTransformer):
     def __init__(self, name="ovos-dialog-transformer-openai-plugin", priority=10, config=None):
+        """
+        Initializes the OpenAIDialogTransformer with a name, priority, and configuration.
+        
+        Creates an OpenAIChatCompletionsSolver using the provided API key, API URL, and a system prompt from the configuration or a default prompt if not specified.
+        """
         super().__init__(name, priority, config)
         self.solver = OpenAIChatCompletionsSolver({
             "key": self.config.get("key"),
@@ -17,9 +22,16 @@ class OpenAIDialogTransformer(DialogTransformer):
 
     def transform(self, dialog: str, context: dict = None) -> Tuple[str, dict]:
         """
-        Optionally transform passed dialog and/or return additional context
-        :param dialog: str utterance to mutate before TTS
-        :returns: str mutated dialog
+        Transforms the dialog string using a character-specific prompt if available.
+        
+        If a prompt is provided in the context or configuration, rewrites the dialog as if spoken by a different character using the solver; otherwise, returns the original dialog unchanged.
+        
+        Args:
+            dialog: The dialog string to be transformed.
+            context: Optional dictionary containing transformation context, such as a prompt or language.
+        
+        Returns:
+            A tuple containing the transformed (or original) dialog and the unchanged context.
         """
         prompt = context.get("prompt") or self.config.get("rewrite_prompt")
         if not prompt:
