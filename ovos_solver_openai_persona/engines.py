@@ -20,15 +20,15 @@ class OpenAICompletionsSolver(QuestionSolver):
                  enable_cache: bool = False,
                  internal_lang: Optional[str] = None):
         """
-                 Initializes the OpenAICompletionsSolver with API configuration and credentials.
-                 
-                 Raises:
-                     ValueError: If the API key is not provided in the configuration.
-                 """
-                 super().__init__(config=config, translator=translator,
-                         detector=detector, priority=priority,
-                         enable_tx=enable_tx, enable_cache=enable_cache,
-                         internal_lang=internal_lang)
+        Initializes the OpenAICompletionsSolver with API configuration and credentials.
+         
+        Raises:
+            ValueError: If the API key is not provided in the configuration.
+        """
+        super().__init__(config=config, translator=translator,
+                 detector=detector, priority=priority,
+                 enable_tx=enable_tx, enable_cache=enable_cache,
+                 internal_lang=internal_lang)
         self.api_url = f"{self.config.get('api_url', 'https://api.openai.com/v1')}/completions"
         self.engine = self.config.get("model", "gpt-4o-mini")
         self.key = self.config.get("key")
@@ -101,15 +101,15 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
                  enable_cache: bool = False,
                  internal_lang: Optional[str] = None):
         """
-                 Initializes the OpenAIChatCompletionsSolver with API configuration, memory settings, and system prompt.
-                 
-                 Raises:
-                     ValueError: If the API key is not provided in the configuration.
-                 """
-                 super().__init__(config=config, translator=translator,
-                         detector=detector, priority=priority,
-                         enable_tx=enable_tx, enable_cache=enable_cache,
-                         internal_lang=internal_lang)
+        Initializes the OpenAIChatCompletionsSolver with API configuration, memory settings, and system prompt.
+         
+        Raises:
+            ValueError: If the API key is not provided in the configuration.
+        """
+        super().__init__(config=config, translator=translator,
+                 detector=detector, priority=priority,
+                 enable_tx=enable_tx, enable_cache=enable_cache,
+                 internal_lang=internal_lang)
         self.api_url = f"{self.config.get('api_url', 'https://api.openai.com/v1')}/chat/completions"
         self.engine = self.config.get("model", "gpt-4o-mini")
         self.key = self.config.get("key")
