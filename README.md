@@ -35,11 +35,11 @@ This plugins also provides a default "Remote LLama" demo persona, it points to a
 you can rewrite text dynamically based on specific personas, such as simplifying explanations or mimicking a specific tone.  
 
 #### Example Usage:
-- **Persona:** `"rewrite the text as if you were explaining it to a 5-year-old"`  
+- **`rewrite_prompt`:** `"rewrite the text as if you were explaining it to a 5-year-old"`  
 - **Input:** `"Quantum mechanics is a branch of physics that describes the behavior of particles at the smallest scales."`  
 - **Output:** `"Quantum mechanics is like a special kind of science that helps us understand really tiny things."`  
 
-Examples of `persona` Values:
+Examples of `rewrite_prompt` Values:
 - `"rewrite the text as if it was an angry old man speaking"`  
 - `"Add more 'dude'ness to it"`  
 - `"Explain it like you're teaching a child"`  
