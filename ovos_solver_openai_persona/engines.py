@@ -24,7 +24,7 @@ class OpenAICompletionsSolver(QuestionSolver):
                          enable_tx=enable_tx, enable_cache=enable_cache,
                          internal_lang=internal_lang)
         self.api_url = f"{self.config.get('api_url', 'https://api.openai.com/v1')}/completions"
-        self.engine = self.config.get("model", "text-davinci-002")  # "ada" cheaper and faster, "davinci" better
+        self.engine = self.config.get("model", "gpt-4o-mini")
         self.key = self.config.get("key")
         if not self.key:
             LOG.error("key not set in config")
@@ -107,7 +107,14 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         self.memory = config.get("enable_memory", True)
         self.max_utts = config.get("memory_size", 3)
         self.qa_pairs = []  # tuple of q+a
-        self.initial_prompt = config.get("initial_prompt", "You are a helpful assistant.")
+        if "persona" in config:
+            LOG.warning("'persona' config option is deprecated, use 'system_prompt' instead")
+        if "initial_prompt" in config:
+            LOG.warning("'initial_prompt' config option is deprecated, use 'system_prompt' instead")
+        self.system_prompt = config.get("system_prompt") or config.get("initial_prompt")
+        if not self.system_prompt:
+            self.system_prompt =  "You are a helpful assistant."
+            LOG.error(f"system prompt not set in config! defaulting to '{self.system_prompt}'")
 
     # OpenAI API integration
     def _do_api_request(self, messages):
@@ -179,19 +186,19 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
                     continue
                 yield chunk["choices"][0]["delta"]["content"]
 
-    def get_chat_history(self, initial_prompt=None):
+    def get_chat_history(self, system_prompt=None):
         qa = self.qa_pairs[-1 * self.max_utts:]
-        initial_prompt = initial_prompt or self.initial_prompt or "You are a helpful assistant."
+        system_prompt = system_prompt or self.system_prompt or "You are a helpful assistant."
         messages = [
-            {"role": "system", "content": initial_prompt},
+            {"role": "system", "content": system_prompt},
         ]
         for q, a in qa:
             messages.append({"role": "user", "content": q})
             messages.append({"role": "assistant", "content": a})
         return messages
 
-    def get_messages(self, utt, initial_prompt=None) -> MessageList:
-        messages = self.get_chat_history(initial_prompt)
+    def get_messages(self, utt, system_prompt=None) -> MessageList:
+        messages = self.get_chat_history(system_prompt)
         messages.append({"role": "user", "content": utt})
         return messages
 
@@ -209,6 +216,8 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         Returns:
             Optional[str]: The generated response or None if no response could be generated.
         """
+        if messages[0]["role"] != "system":
+            messages = [{"role": "system", "content": self.system_prompt }] + messages
         response = self._do_api_request(messages)
         answer = post_process_sentence(response)
         if not answer or not answer.strip("?") or not answer.strip("_"):
@@ -218,7 +227,7 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
             self.qa_pairs.append((query, answer))
         return answer
 
-    def stream_chat_utterances(self, messages: List[Dict[str, str]],
+    def stream_chat_utterances(self, messages: MessageList,
                                lang: Optional[str] = None,
                                units: Optional[str] = None) -> Iterable[str]:
         """
@@ -232,6 +241,8 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         Returns:
             Iterable[str]: An iterable of utterances.
         """
+        if messages[0]["role"] != "system":
+            messages = [{"role": "system", "content": self.system_prompt }] + messages
         answer = ""
         query = messages[-1]["content"]
         if self.memory:
