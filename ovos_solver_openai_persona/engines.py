@@ -107,6 +107,8 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         self.memory = config.get("enable_memory", True)
         self.max_utts = config.get("memory_size", 3)
         self.qa_pairs = []  # tuple of q+a
+        if "persona" in config:
+            LOG.warning("'persona' config option is deprecated, use 'system_prompt' instead")
         if "initial_prompt" in config:
             LOG.warning("'initial_prompt' config option is deprecated, use 'system_prompt' instead")
         self.system_prompt = config.get("system_prompt") or config.get("initial_prompt")
