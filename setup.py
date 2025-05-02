@@ -48,7 +48,7 @@ def get_version():
 
 
 PERSONA_ENTRY_POINT = 'Remote Llama=ovos_solver_openai_persona:LLAMA_DEMO'
-PLUGIN_ENTRY_POINT = 'ovos-solver-openai-plugin=ovos_solver_openai_persona.engines:OpenAICompletionsSolver'
+PLUGIN_ENTRY_POINT = 'ovos-solver-openai-plugin=ovos_solver_openai_persona.engines:OpenAIChatCompletionsSolver'
 DIALOG_PLUGIN_ENTRY_POINT = 'ovos-dialog-transformer-openai-plugin=ovos_solver_openai_persona.dialog_transformers:OpenAIDialogTransformer'
 SUMMARIZER_ENTRY_POINT = 'ovos-summarizer-openai-plugin=ovos_solver_openai_persona.summarizer:OpenAISummarizer'
 
