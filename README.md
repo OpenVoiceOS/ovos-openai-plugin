@@ -18,10 +18,10 @@ To create your own persona using a OpenAI compatible server create a .json in `~
   "solvers": [
     "ovos-solver-openai-plugin"
   ],
-  "ovos-openai-plugin": {
+  "ovos-solver-openai-plugin": {
     "api_url": "https://llama.smartgic.io/v1",
     "key": "sk-xxxx",
-    "persona": "helpful, creative, clever, and very friendly."
+    "system_prompt": "You are helping assistant who gives very short and factual answers in maximum twenty words and you don't use emojis"
   }
 }
 ```
@@ -35,11 +35,11 @@ This plugins also provides a default "Remote LLama" demo persona, it points to a
 you can rewrite text dynamically based on specific personas, such as simplifying explanations or mimicking a specific tone.  
 
 #### Example Usage:
-- **Persona:** `"rewrite the text as if you were explaining it to a 5-year-old"`  
+- **`rewrite_prompt`:** `"rewrite the text as if you were explaining it to a 5-year-old"`  
 - **Input:** `"Quantum mechanics is a branch of physics that describes the behavior of particles at the smallest scales."`  
 - **Output:** `"Quantum mechanics is like a special kind of science that helps us understand really tiny things."`  
 
-Examples of `persona` Values:
+Examples of `rewrite_prompt` Values:
 - `"rewrite the text as if it was an angry old man speaking"`  
 - `"Add more 'dude'ness to it"`  
 - `"Explain it like you're teaching a child"`  
@@ -49,10 +49,13 @@ To enable this plugin, add the following to your `mycroft.conf`:
 ```json
 "dialog_transformers": {
     "ovos-dialog-transformer-openai-plugin": {
+        "system_prompt": "Your task is to rewrite text as if it was spoken by a different character",
         "rewrite_prompt": "rewrite the text as if you were explaining it to a 5-year-old"
     }
 }
 ```
+
+> 💡 the user utterance will be appended after `rewrite_prompt` for the actual query
 
 ## Direct Usage
 

@@ -1,43 +1,19 @@
-from typing import Optional
-
+import warnings
 from ovos_solver_openai_persona.engines import OpenAIChatCompletionsSolver
 
-
 class OpenAIPersonaSolver(OpenAIChatCompletionsSolver):
-    """default "Persona" engine"""
-
-    def __init__(self, config=None):
-        # defaults to gpt-3.5-turbo
-        super().__init__(config=config)
-        self.default_persona = config.get("persona") or "helpful, creative, clever, and very friendly."
-
-    def get_chat_history(self, persona=None):
-        persona = persona or self.default_persona
-        initial_prompt = f"You are a helpful assistant. " \
-                         f"You give short and factual answers. " \
-                         f"You are {persona}"
-        return super().get_chat_history(initial_prompt)
-
-    # officially exported Solver methods
-    def get_spoken_answer(self, query: str,
-                          lang: Optional[str] = None,
-                          units: Optional[str] = None) -> Optional[str]:
-        """
-        Obtain the spoken answer for a given query.
-
-        Args:
-            query (str): The query text.
-            lang (Optional[str]): Optional language code. Defaults to None.
-            units (Optional[str]): Optional units for the query. Defaults to None.
-
-        Returns:
-            str: The spoken answer as a text response.
-        """
-        answer = super().get_spoken_answer(query, lang, units)
-        if not answer or not answer.strip("?") or not answer.strip("_"):
-            return None
-        return answer
-
+    def __init__(self, *args, **kwargs):
+           """
+           Initializes the solver and issues a deprecation warning.
+           
+           A DeprecationWarning is raised advising to use OpenAIChatCompletionsSolver instead.
+           """
+           warnings.warn(
+              "use OpenAIChatCompletionsSolver instead",
+              DeprecationWarning,
+              stacklevel=2,
+           )
+           super().__init__(*args, **kwargs)
 
 # for ovos-persona
 LLAMA_DEMO = {
@@ -51,9 +27,8 @@ LLAMA_DEMO = {
   }
 }
 
-
 if __name__ == "__main__":
-    bot = OpenAIPersonaSolver(LLAMA_DEMO["ovos-solver-openai-plugin"])
+    bot = OpenAIChatCompletionsSolver(LLAMA_DEMO["ovos-solver-openai-plugin"])
     #for utt in bot.stream_utterances("describe quantum mechanics in simple terms"):
     #    print(utt)
         #  Quantum mechanics is a branch of physics that studies the behavior of atoms and particles at the smallest scales.

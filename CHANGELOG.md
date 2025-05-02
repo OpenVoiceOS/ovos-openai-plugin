@@ -1,16 +1,32 @@
 # Changelog
 
-## [2.0.1a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.1a1) (2025-04-10)
+## [2.0.2a3](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.2a3) (2025-05-02)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/V2.0.0...2.0.1a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.2a2...2.0.2a3)
 
 **Merged pull requests:**
 
-- fix: params from config [\#24](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/24) ([JarbasAl](https://github.com/JarbasAl))
+- fix: setup.py [\#29](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/29) ([JarbasAl](https://github.com/JarbasAl))
 
-## [V2.0.0](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/V2.0.0) (2025-02-26)
+## [2.0.2a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.2a2) (2025-05-02)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.0...V2.0.0)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.2a1...2.0.2a2)
+
+## [2.0.2a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.2a1) (2025-05-02)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/V2.0.1...2.0.2a1)
+
+**Breaking changes:**
+
+- Use system\_prompt in solver configuration \(breaking change\) [\#19](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/19) ([Delfshkrimm](https://github.com/Delfshkrimm))
+
+**Merged pull requests:**
+
+- 📝 Add docstrings to `patch-1` [\#26](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/26) ([coderabbitai[bot]](https://github.com/apps/coderabbitai))
+
+## [V2.0.1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/V2.0.1) (2025-04-10)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.1...V2.0.1)
 
 
 
