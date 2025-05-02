@@ -261,18 +261,18 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
                       lang: Optional[str],
                       units: Optional[str] = None) -> Optional[str]:
         """
-                      Generates a chat response using the provided message history and updates memory if enabled.
-                      
-                      If the first message is not a system prompt, prepends the system prompt. Processes the API response and returns a cleaned answer, or None if the answer is empty or only punctuation/underscores. Updates internal memory with the latest question and answer if memory is enabled.
-                      
-                      Args:
-                          messages: List of chat messages with 'role' and 'content' keys.
-                          lang: Optional language code for the response.
-                          units: Optional unit system for numerical values.
-                      
-                      Returns:
-                          The generated response as a string, or None if no valid response is produced.
-                      """
+        Generates a chat response using the provided message history and updates memory if enabled.
+
+        If the first message is not a system prompt, prepends the system prompt. Processes the API response and returns a cleaned answer, or None if the answer is empty or only punctuation/underscores. Updates internal memory with the latest question and answer if memory is enabled.
+
+        Args:
+            messages: List of chat messages with 'role' and 'content' keys.
+            lang: Optional language code for the response.
+            units: Optional unit system for numerical values.
+
+        Returns:
+            The generated response as a string, or None if no valid response is produced.
+        """
         if messages[0]["role"] != "system":
             messages = [{"role": "system", "content": self.system_prompt }] + messages
         response = self._do_api_request(messages)
@@ -288,12 +288,16 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
                                lang: Optional[str] = None,
                                units: Optional[str] = None) -> Iterable[str]:
         """
-                               Streams partial chat responses as utterances based on punctuation or newlines.
-                               
-                               Yields segments of the assistant's reply as they are received from the OpenAI API,
-                               splitting at sentence boundaries or newlines while avoiding splitting numeric decimals.
-                               Updates conversation memory with each partial answer if enabled.
-                               """
+        Stream utterances for the given chat history as they become available.
+
+        Args:
+            messages: The chat messages.
+            lang (Optional[str]): Optional language code. Defaults to None.
+            units (Optional[str]): Optional units for the query. Defaults to None.
+
+        Returns:
+            Iterable[str]: An iterable of utterances.
+        """
         if messages[0]["role"] != "system":
             messages = [{"role": "system", "content": self.system_prompt }] + messages
         answer = ""
