@@ -14,9 +14,9 @@ class OpenAIPersonaSolver(OpenAIChatCompletionsSolver):
 LLAMA_DEMO = {
   "name": "Remote LLama",
   "solvers": [
-    "ovos-solver-openai-persona-plugin"
+    "ovos-solver-openai-plugin"
   ],
-  "ovos-solver-openai-persona-plugin": {
+  "ovos-solver-openai-plugin": {
     "api_url": "https://llama.smartgic.io/v1",
     "key": "sk-xxxx"
   }
