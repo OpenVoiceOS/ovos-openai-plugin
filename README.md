@@ -49,10 +49,13 @@ To enable this plugin, add the following to your `mycroft.conf`:
 ```json
 "dialog_transformers": {
     "ovos-dialog-transformer-openai-plugin": {
+        "system_prompt": "Your task is to rewrite text as if it was spoken by a different character",
         "rewrite_prompt": "rewrite the text as if you were explaining it to a 5-year-old"
     }
 }
 ```
+
+> 💡 the user utterance will be appended after `rewrite_prompt` for the actual query
 
 ## Direct Usage
 
