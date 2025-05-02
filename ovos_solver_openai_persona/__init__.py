@@ -28,7 +28,7 @@ LLAMA_DEMO = {
 }
 
 if __name__ == "__main__":
-    bot = OpenAIChatCompletionsSolver(LLAMA_DEMO["ovos-solver-openai-persona-plugin"])
+    bot = OpenAIChatCompletionsSolver(LLAMA_DEMO["ovos-solver-openai-plugin"])
     #for utt in bot.stream_utterances("describe quantum mechanics in simple terms"):
     #    print(utt)
         #  Quantum mechanics is a branch of physics that studies the behavior of atoms and particles at the smallest scales.
