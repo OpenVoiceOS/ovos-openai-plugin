@@ -214,7 +214,7 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         Returns:
             Optional[str]: The generated response or None if no response could be generated.
         """
-        if not messages or messages[0]["role"] != "system":
+        if messages[0]["role"] != "system":
             messages = [{"role": "system", "content": self.system_prompt }] + messages
         response = self._do_api_request(messages)
         answer = post_process_sentence(response)
@@ -239,7 +239,7 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         Returns:
             Iterable[str]: An iterable of utterances.
         """
-        if not messages or messages[0]["role"] != "system":
+        if messages[0]["role"] != "system":
             messages = [{"role": "system", "content": self.system_prompt }] + messages
         answer = ""
         query = messages[-1]["content"]
