@@ -219,7 +219,9 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
                     break
                 if "content" not in chunk["choices"][0]["delta"]:
                     continue
-                yield chunk["choices"][0]["delta"]["content"]
+                text = chunk["choices"][0]["delta"]["content"]
+                if text is not None:
+                    yield text
 
     def get_chat_history(self, system_prompt=None):
         """
