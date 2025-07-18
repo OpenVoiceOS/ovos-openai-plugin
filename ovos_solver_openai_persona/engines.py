@@ -126,7 +126,7 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         self.system_prompt = config.get("system_prompt") or config.get("initial_prompt")
         if not self.system_prompt:
             self.system_prompt =  "You are a helpful assistant."
-            LOG.error(f"system prompt not set in config! defaulting to '{self.system_prompt}'")
+            LOG.debug(f"system prompt not set in config! defaulting to '{self.system_prompt}'")
 
     # OpenAI API integration
     def _do_api_request(self, messages):
@@ -256,7 +256,7 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         messages.append({"role": "user", "content": utt})
         return messages
 
-    # abstract Solver methods
+    ## chat completions api - message list as input
     def continue_chat(self, messages: MessageList,
                       lang: Optional[str],
                       units: Optional[str] = None) -> Optional[str]:
@@ -317,6 +317,7 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
                     yield post_process_sentence(answer)
                 answer = ""
 
+    ## completions api - single text as input
     def stream_utterances(self, query: str,
                           lang: Optional[str] = None,
                           units: Optional[str] = None) -> Iterable[str]:
