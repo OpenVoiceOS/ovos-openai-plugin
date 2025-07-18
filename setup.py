@@ -23,7 +23,12 @@ with open(os.path.join(BASEDIR, "README.md"), "r") as f:
 
 
 def get_version():
-    """ Find the version of the package"""
+    """
+    Extract and return the package version string from the version.py file.
+    
+    Returns:
+        str: The version string in the format 'major.minor.build' with an optional 'a{alpha}' suffix if an alpha version is specified.
+    """
     version_file = os.path.join(BASEDIR, 'ovos_solver_openai_persona', 'version.py')
     major, minor, build, alpha = (None, None, None, None)
     with open(version_file) as f:
