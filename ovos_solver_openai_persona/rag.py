@@ -100,16 +100,16 @@ class OpenAIRAGSolver(ChatMessageSolver):
 
     def _search_vector_store(self, query: str) -> List[str]:
         """
-        Performs a search against the ovos-persona-server's vector store.
+        Searches the configured vector store for relevant text chunks matching the user query.
 
-        Args:
-            query (str): The user's query string.
+        Parameters:
+            query (str): The user's query string to search for relevant context.
 
         Returns:
-            List[str]: A list of relevant text chunks (content) retrieved from the vector store.
+            List[str]: A list of text chunks retrieved from the vector store that are relevant to the query.
 
         Raises:
-            RequestException: If the search API call fails or returns an error.
+            RequestException: If the search request fails or the response format is invalid.
         """
         search_url = f"{self.api_url}/vector_stores/{self.vector_store_id}/search"
         headers = {"Content-Type": "application/json"}
@@ -140,15 +140,17 @@ class OpenAIRAGSolver(ChatMessageSolver):
 
     def _build_llm_messages(self, user_query: str, retrieved_context_chunks: List[str], chat_history: List[Dict[str, str]]) -> List[Dict[str, str]]:
         """
-        Constructs the complete message list for the LLM, including RAG context and chat history.
+        Constructs the message list for the LLM by combining retrieved context, recent chat history, and the current user query.
 
-        Args:
-            user_query (str): The current user's utterance.
-            retrieved_context_chunks (List[str]): List of text chunks retrieved from the vector store.
-            chat_history (List[Dict[str, str]]): The conversation history from `self.qa_pairs`.
+        The method concatenates relevant context chunks (up to a token limit), formats the system prompt with this context and the user's question, appends recent Q&A pairs from memory, and adds the current user query as the final message.
+
+        Parameters:
+            user_query (str): The user's current question or utterance.
+            retrieved_context_chunks (List[str]): Relevant text segments retrieved from the vector store.
+            chat_history (List[Dict[str, str]]): Previous conversation history.
 
         Returns:
-            List[Dict[str, str]]: A new list of messages, augmented with the RAG context and history.
+            List[Dict[str, str]]: The complete list of messages to send to the LLM, including system prompt, chat history, and user query.
         """
         context_str = ""
         current_context_tokens = 0
@@ -186,8 +188,10 @@ class OpenAIRAGSolver(ChatMessageSolver):
 
     def get_chat_history(self) -> List[Dict[str, str]]:
         """
-        Returns the chat history managed by this RAG solver.
-        This method is called by the base ChatMessageSolver.
+        Return the recent chat history as a list of user and assistant messages.
+
+        Returns:
+            List of message dictionaries representing the most recent question-answer pairs, formatted with roles 'user' and 'assistant'.
         """
         # The base class expects a list of messages (role, content).
         # We store (query, answer) tuples.
@@ -202,17 +206,18 @@ class OpenAIRAGSolver(ChatMessageSolver):
                       lang: Optional[str],
                       units: Optional[str] = None) -> Optional[str]:
         """
-        Generates a chat response using RAG by directly calling the Persona Server's
-        chat completions endpoint.
+        Generate a chat response by augmenting the user query with retrieved context from a vector store and sending the constructed prompt to the Persona Server's chat completions endpoint.
 
-        Args:
-            messages: List of chat messages with 'role' and 'content' keys.
-                      The last user message is used for RAG retrieval and as the current query.
-            lang: Optional language code for the response.
-            units: Optional unit system for numerical values.
+        Parameters:
+            messages (List[Dict[str, str]]): List of chat messages, where the last message is treated as the current user query.
+            lang (Optional[str]): Optional language code for the response.
+            units (Optional[str]): Optional unit system for numerical values.
 
         Returns:
-            The generated response as a string, or None if no valid response is produced.
+            Optional[str]: The generated response as a string, or None if no valid response is produced.
+
+        Raises:
+            RequestException: If the Persona Server's chat completions endpoint returns an error or an invalid response.
         """
         user_query = messages[-1]["content"] # Get the current user query
 
@@ -265,16 +270,17 @@ class OpenAIRAGSolver(ChatMessageSolver):
                                lang: Optional[str] = None,
                                units: Optional[str] = None) -> Iterable[str]: # Yields raw data: lines
         """
-        Stream utterances for the given chat history using RAG by directly calling the Persona Server's
-        chat completions endpoint in streaming mode.
+        Streams chat completion responses from the Persona Server using Retrieval Augmented Generation (RAG), yielding each line of streamed data as it arrives.
 
-        Args:
-            messages: The chat messages. The last user message is used for RAG retrieval and as the current query.
-            lang (Optional[str]): Optional language code. Defaults to None.
-            units (Optional[str]): Optional units for the query. Defaults to None.
+        The method retrieves relevant context from the vector store based on the latest user query, augments the chat history, and streams the LLM's response line by line. If enabled, it stores the full answer in memory for multi-turn conversations.
+
+        Parameters:
+            messages (List[Dict[str, str]]): The chat history, with the last message as the current user query.
+            lang (Optional[str]): Optional language code for the query.
+            units (Optional[str]): Optional units for the query.
 
         Returns:
-            Iterable[str]: An iterable of raw data: [JSON] strings from the streaming API.
+            Iterable[str]: Yields each raw data line (as a string) from the streaming API response.
         """
         user_query = messages[-1]["content"] # Get the current user query
 
@@ -339,15 +345,15 @@ class OpenAIRAGSolver(ChatMessageSolver):
                           lang: Optional[str] = None,
                           units: Optional[str] = None) -> Iterable[str]:
         """
-        Stream utterances for the given query using RAG.
+        Streams the assistant's response for a given user query, incorporating current chat history and Retrieval Augmented Generation context.
 
-        Args:
-            query (str): The query text.
-            lang (Optional[str]): Optional language code. Defaults to None.
-            units (Optional[str]): Optional units for the query. Defaults to None.
+        Parameters:
+            query (str): The user's input query.
+            lang (Optional[str]): Language code for the response, if applicable.
+            units (Optional[str]): Units relevant to the query, if applicable.
 
         Returns:
-            Iterable[str]: An iterable of raw data: [JSON] strings from the streaming API.
+            Iterable[str]: Yields raw data chunks from the streaming chat completions API.
         """
         # For stream_utterances, we directly build a single-turn message list
         # We need to include existing chat history here as well for proper context
@@ -359,15 +365,15 @@ class OpenAIRAGSolver(ChatMessageSolver):
                           lang: Optional[str] = None,
                           units: Optional[str] = None) -> Optional[str]:
         """
-        Obtain the spoken answer for a given query using RAG.
+        Return the assistant's spoken answer to a user query, incorporating recent chat history for context.
 
-        Args:
-            query (str): The query text.
-            lang (Optional[str]): Optional language code. Defaults to None.
-            units (Optional[str]): Optional units for the query. Defaults to None.
+        Parameters:
+            query (str): The user's input question.
+            lang (Optional[str]): Language code for the response, if specified.
+            units (Optional[str]): Units relevant to the query, if specified.
 
         Returns:
-            str: The spoken answer as a text response.
+            Optional[str]: The assistant's text response, or None if no answer is generated.
         """
         # For get_spoken_answer, we need to include existing chat history
         messages: List[Dict[str, str]] = self.get_chat_history()
@@ -376,8 +382,13 @@ class OpenAIRAGSolver(ChatMessageSolver):
 
     def get_messages(self, utt: str, system_prompt: Optional[str] = None) -> List[Dict[str, str]]:
         """
-        Builds a message list including the RAG solver's chat history and the current user utterance.
-        The system prompt for the LLM is constructed dynamically in _build_llm_messages.
+        Return the current chat history messages with the latest user utterance appended.
+
+        Parameters:
+        	utt (str): The current user utterance to add to the message list.
+
+        Returns:
+        	List of message dictionaries representing the conversation history plus the new user message.
         """
         messages = self.get_chat_history()
         messages.append({"role": "user", "content": utt})
