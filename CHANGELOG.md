@@ -1,16 +1,32 @@
 # Changelog
 
-## [2.0.3a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.3a1) (2025-06-08)
+## [2.0.5a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.5a2) (2025-07-31)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/V2.0.2...2.0.3a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.5a1...2.0.5a2)
 
 **Merged pull requests:**
 
-- fix: compatibility with ovos-plugin-manager 1.X.X [\#32](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/32) ([JarbasAl](https://github.com/JarbasAl))
+- Added models to the public server [\#36](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/36) ([timonvanhasselt](https://github.com/timonvanhasselt))
 
-## [V2.0.2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/V2.0.2) (2025-05-02)
+## [2.0.5a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.5a1) (2025-07-31)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.2...V2.0.2)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.4a1...2.0.5a1)
+
+**Merged pull requests:**
+
+- fix: public server now requires "model" param [\#40](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/40) ([JarbasAl](https://github.com/JarbasAl))
+
+## [2.0.4a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.4a1) (2025-06-20)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/V2.0.3...2.0.4a1)
+
+**Merged pull requests:**
+
+- fix: streaming response [\#34](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/34) ([JarbasAl](https://github.com/JarbasAl))
+
+## [V2.0.3](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/V2.0.3) (2025-06-08)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.3...V2.0.3)
 
 
 
