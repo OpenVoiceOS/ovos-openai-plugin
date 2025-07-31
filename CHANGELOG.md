@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.5a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.5a2) (2025-07-31)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.5a1...2.0.5a2)
+
+**Merged pull requests:**
+
+- Added models to the public server [\#36](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/36) ([timonvanhasselt](https://github.com/timonvanhasselt))
+
 ## [2.0.5a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.5a1) (2025-07-31)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.4a1...2.0.5a1)
