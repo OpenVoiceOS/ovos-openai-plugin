@@ -23,7 +23,8 @@ LLAMA_DEMO = {
   ],
   "ovos-solver-openai-plugin": {
     "api_url": "https://llama.smartgic.io/v1",
-    "key": "sk-xxxx"
+    "key": "sk-xxxx",
+    "model": "llama3.1:8b"
   }
 }
 
