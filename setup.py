@@ -54,7 +54,7 @@ SUMMARIZER_ENTRY_POINT = 'ovos-summarizer-openai-plugin=ovos_solver_openai_perso
 
 
 setup(
-    name='ovos-openai-plugin',
+    name='ovos_openai_plugin',
     version=get_version(),
     description='A question solver plugin for ovos',
     url='https://github.com/OpenVoiceOS/ovos-solver-plugin-openai-persona',
