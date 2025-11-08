@@ -39,4 +39,11 @@ if __name__ == "__main__":
 
     # Quantum mechanics is a branch of physics that deals with the behavior of particles on a very small scale, such as atoms and subatomic particles. It explores the idea that particles can exist in multiple states at once and that their behavior is not predictable in the traditional sense.
     print(bot.spoken_answer("what is the definition of computer", lang="en-US"))
-    # O português Pedro Álvares Cabral encontrou o caminho marítimo para o Brasil em 1500. Ele foi o responsável por descobrir o litoral brasileiro, embora Cristóvão Colombo tenha chegado à América do Sul em 1498, cinco anos antes. Cabral desembarcou na atual costa de Alagoas, no Nordeste do Brasil.
+    # Okay, let's break down the definition of a computer. Here's a comprehensive explanation, covering different aspects:
+    #
+    # At its core, a computer is an electronic device that can:
+    #
+    #    Receive Input: Take in data and instructions.
+    #    Process Data: Perform calculations and manipulate data based on those instructions.
+    #    Store Data:  Save data and instructions for later use.
+    #    Produce Output:  Present the results of processing in a
