@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.7a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a2) (2025-12-19)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a1...2.0.7a2)
+
+**Merged pull requests:**
+
+- chore\(deps\): update dependency python to 3.14 [\#47](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/47) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [2.0.7a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a1) (2025-12-18)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/V2.0.6...2.0.7a1)
