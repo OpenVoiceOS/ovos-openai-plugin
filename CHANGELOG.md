@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.7a6](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a6) (2026-01-30)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a5...2.0.7a6)
+
+**Merged pull requests:**
+
+- chore\(deps\): update pilosus/action-pip-license-checker action to v3 [\#53](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/53) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [2.0.7a5](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a5) (2026-01-30)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a4...2.0.7a5)
+
 ## [2.0.7a4](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a4) (2026-01-30)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a2...2.0.7a4)
