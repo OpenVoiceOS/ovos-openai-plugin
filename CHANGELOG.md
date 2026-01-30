@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.7a4](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a4) (2026-01-30)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a2...2.0.7a4)
+
+**Merged pull requests:**
+
+- chore\(deps\): update actions/setup-python action to v6 - autoclosed [\#52](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/52) ([renovate[bot]](https://github.com/apps/renovate))
+- chore\(deps\): update actions/checkout action to v6 [\#51](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/51) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [2.0.7a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a2) (2025-12-19)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a1...2.0.7a2)
