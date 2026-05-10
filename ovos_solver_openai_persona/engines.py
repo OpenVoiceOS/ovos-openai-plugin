@@ -209,19 +209,25 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         }
         for chunk in s.post(self.api_url, headers=headers,
                             stream=True, data=json.dumps(payload)).iter_lines():
-            if chunk:
-                chunk = chunk.decode("utf-8")
-                chunk = json.loads(chunk.split("data: ", 1)[-1])
-                if "error" in chunk and "message" in chunk["error"]:
-                    LOG.error("API returned an error: " + chunk["error"]["message"])
-                    break
-                if chunk["choices"][0].get("finish_reason"):
-                    break
-                if "content" not in chunk["choices"][0]["delta"]:
-                    continue
-                text = chunk["choices"][0]["delta"]["content"]
-                if text is not None:
-                    yield text
+            if not chunk:
+                continue
+            line = chunk.decode("utf-8")
+            if not line.startswith("data: "):
+                continue  # SSE comment (':') or non-data field; ignore per spec
+            data_part = line[len("data: "):].strip()
+            if not data_part or data_part == "[DONE]":
+                continue
+            chunk = json.loads(data_part)
+            if "error" in chunk and "message" in chunk["error"]:
+                LOG.error("API returned an error: " + chunk["error"]["message"])
+                break
+            if chunk["choices"][0].get("finish_reason"):
+                break
+            if "content" not in chunk["choices"][0]["delta"]:
+                continue
+            text = chunk["choices"][0]["delta"]["content"]
+            if text is not None:
+                yield text
 
     def get_chat_history(self, system_prompt=None):
         """
