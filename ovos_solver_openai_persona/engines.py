@@ -210,8 +210,10 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         for chunk in s.post(self.api_url, headers=headers,
                             stream=True, data=json.dumps(payload)).iter_lines():
             if chunk:
-                chunk = chunk.decode("utf-8")
-                chunk = json.loads(chunk.split("data: ", 1)[-1])
+                chunk = chunk.decode("utf-8").split("data: ", 1)[-1].strip()
+                if not chunk or chunk == "[DONE]":
+                    continue
+                chunk = json.loads(chunk)
                 if "error" in chunk and "message" in chunk["error"]:
                     LOG.error("API returned an error: " + chunk["error"]["message"])
                     break
