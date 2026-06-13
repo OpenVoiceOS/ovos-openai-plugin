@@ -71,6 +71,16 @@ setup(
         "opm.plugin.persona": PERSONA_ENTRY_POINT
     },
     install_requires=required("requirements.txt"),
+    extras_require={
+        "test-e2e": [
+            "ovos-persona-server",
+            "ovos-solver-failure-plugin",
+            "uvicorn",
+            "httpx",
+            "openai",
+            "pytest",
+        ],
+    },
     long_description=long_description,
     long_description_content_type='text/markdown'
 )
