@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.7a7](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a7) (2026-06-14)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a6...2.0.7a7)
+
+**Merged pull requests:**
+
+- docs: add NGI0 Commons Fund attribution [\#57](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/57) ([JarbasAl](https://github.com/JarbasAl))
+- fix: handle SSE \[DONE\] terminator, empty keep-alives, and comment lines [\#55](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/55) ([jsilter](https://github.com/jsilter))
+
 ## [2.0.7a6](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a6) (2026-01-30)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a5...2.0.7a6)
