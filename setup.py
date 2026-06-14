@@ -72,7 +72,8 @@ setup(
     },
     install_requires=required("requirements.txt"),
     extras_require={
-        "test-e2e": [
+        "test": [
+            "ovos-persona @ git+https://github.com/OpenVoiceOS/ovos-persona@dev",
             "ovos-persona-server",
             "ovos-solver-failure-plugin",
             "uvicorn",
