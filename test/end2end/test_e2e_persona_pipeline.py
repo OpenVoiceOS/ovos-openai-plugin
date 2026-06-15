@@ -46,6 +46,28 @@ if not is_pipeline_available(PERSONA_PIPELINE):
         "ovos-persona-pipeline-plugin not installed", allow_module_level=True
     )
 
+
+def _ensure_persona_locale() -> None:
+    """Ensure ``ovos_persona`` ships a ``locale`` resource directory.
+
+    Some published ovos-persona wheels omit the ``locale`` folder, which makes
+    the OVOSAbstractApplication resource binding fail at load time with newer
+    ovos-workshop, so the persona pipeline plugin never registers. Creating an
+    empty locale tree is enough for the binding to succeed.
+    """
+    import ovos_persona
+
+    locale_dir = os.path.join(
+        os.path.dirname(ovos_persona.__file__), "locale", "en-us"
+    )
+    try:
+        os.makedirs(locale_dir, exist_ok=True)
+    except OSError:
+        pass
+
+
+_ensure_persona_locale()
+
 # ---------------------------------------------------------------------------
 # Deterministic reply served by the local OpenAI-compatible stub
 # ---------------------------------------------------------------------------
