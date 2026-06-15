@@ -22,10 +22,8 @@ import urllib.request
 
 import pytest
 
-ovoscope = pytest.importorskip("ovoscope")
-pytest.importorskip("ovos_persona")
-pytest.importorskip("fastapi")
-pytest.importorskip("uvicorn")
+import ovoscope
+import ovos_persona
 
 import uvicorn
 from fastapi import FastAPI, Request
@@ -41,32 +39,9 @@ from ovoscope import (
     is_pipeline_available,
 )
 
-if not is_pipeline_available(PERSONA_PIPELINE):
-    pytest.skip(
-        "ovos-persona-pipeline-plugin not installed", allow_module_level=True
-    )
-
-
-def _ensure_persona_locale() -> None:
-    """Ensure ``ovos_persona`` ships a ``locale`` resource directory.
-
-    Some published ovos-persona wheels omit the ``locale`` folder, which makes
-    the OVOSAbstractApplication resource binding fail at load time with newer
-    ovos-workshop, so the persona pipeline plugin never registers. Creating an
-    empty locale tree is enough for the binding to succeed.
-    """
-    import ovos_persona
-
-    locale_dir = os.path.join(
-        os.path.dirname(ovos_persona.__file__), "locale", "en-us"
-    )
-    try:
-        os.makedirs(locale_dir, exist_ok=True)
-    except OSError:
-        pass
-
-
-_ensure_persona_locale()
+assert is_pipeline_available(PERSONA_PIPELINE), (
+    "ovos-persona-pipeline-plugin must be installed (ships with ovos-persona)"
+)
 
 # ---------------------------------------------------------------------------
 # Deterministic reply served by the local OpenAI-compatible stub
