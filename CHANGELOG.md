@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.7a8](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a8) (2026-06-15)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a7...2.0.7a8)
+
+**Merged pull requests:**
+
+- test: e2e — OpenAI solver against live persona-server [\#56](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/56) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [2.0.7a7](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a7) (2026-06-14)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a6...2.0.7a7)
