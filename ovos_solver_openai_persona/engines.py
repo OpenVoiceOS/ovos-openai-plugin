@@ -92,6 +92,27 @@ def post_process_sentence(text: str) -> str:
     return text.strip()
 
 
+def _normalize_messages(messages: MessageList) -> MessageList:
+    """Coerce chat messages into plain ``{"role": str, "content": str}`` dicts.
+
+    Callers may pass either OpenAI-style dicts or ``AgentMessage`` objects
+    (as the ovos-persona pipeline does), whose ``role`` may be a string or an
+    enum. Normalize both so the rest of the solver can assume dicts.
+    """
+    normalized: MessageList = []
+    for msg in messages:
+        if isinstance(msg, dict):
+            role = msg.get("role")
+            content = msg.get("content")
+        else:
+            role = getattr(msg, "role", None)
+            content = getattr(msg, "content", None)
+        # role may be an enum (e.g. MessageRole.USER) — unwrap to its value
+        role = getattr(role, "value", role)
+        normalized.append({"role": str(role), "content": content})
+    return normalized
+
+
 class OpenAIChatCompletionsSolver(ChatMessageSolver):
     def __init__(self, config=None,
                  translator: Optional[LanguageTranslator] = None,
@@ -281,7 +302,8 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         Returns:
             The generated response as a string, or None if no valid response is produced.
         """
-        if messages[0]["role"] != "system":
+        messages = _normalize_messages(messages)
+        if not messages or messages[0]["role"] != "system":
             messages = [{"role": "system", "content": self.system_prompt }] + messages
         response = self._do_api_request(messages)
         answer = post_process_sentence(response)
@@ -306,7 +328,8 @@ class OpenAIChatCompletionsSolver(ChatMessageSolver):
         Returns:
             Iterable[str]: An iterable of utterances.
         """
-        if messages[0]["role"] != "system":
+        messages = _normalize_messages(messages)
+        if not messages or messages[0]["role"] != "system":
             messages = [{"role": "system", "content": self.system_prompt }] + messages
         answer = ""
         query = messages[-1]["content"]

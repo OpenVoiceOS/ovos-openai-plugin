@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ovos_openai_plugin"
+dynamic = ["version"]
+description = "A question solver plugin for ovos"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [{ name = "JarbasAi", email = "jarbasai@mailfence.com" }]
+requires-python = ">=3.10"
+keywords = ["ovos", "plugin", "utterance", "fallback", "query"]
+dependencies = [
+    "requests",
+    "ovos-plugin-manager>=2.2.3a1,<3.0.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "ovoscope>=0.13.1",
+    "pytest>=7.0.0,<9",
+    "pytest-timeout>=2.0.0",
+    "ovos-persona>=0.9.0a1",
+    "fastapi",
+    "uvicorn",
+]
+
+[project.urls]
+Homepage = "https://github.com/OpenVoiceOS/ovos-openai-plugin"
+
+[project.entry-points."neon.plugin.solver"]
+"ovos-solver-openai-plugin" = "ovos_solver_openai_persona.engines:OpenAIChatCompletionsSolver"
+
+[project.entry-points."opm.transformer.dialog"]
+"ovos-dialog-transformer-openai-plugin" = "ovos_solver_openai_persona.dialog_transformers:OpenAIDialogTransformer"
+
+[project.entry-points."opm.solver.summarization"]
+"ovos-summarizer-openai-plugin" = "ovos_solver_openai_persona.summarizer:OpenAISummarizer"
+
+[project.entry-points."opm.plugin.persona"]
+"Remote Llama" = "ovos_solver_openai_persona:LLAMA_DEMO"
+
+[project.entry-points."opm.triple_extractor"]
+"ovos-triple-extractor-openai" = "ovos_solver_openai_persona.triple_extractor:OpenAITripleExtractor"
+
+[project.entry-points."opm.triple_validator"]
+"ovos-triple-validator-openai" = "ovos_solver_openai_persona.triple_validator:OpenAITripleValidator"
+
+[project.entry-points."opm.entity_linker"]
+"ovos-entity-linker-openai" = "ovos_solver_openai_persona.entity_linker:OpenAIEntityLinker"
+
+[project.entry-points."opm.lemmatizer"]
+"ovos-lemmatizer-openai" = "ovos_solver_openai_persona.lemmatizer:OpenAILemmatizer"
+
+[tool.setuptools.dynamic]
+version = { attr = "ovos_solver_openai_persona.version.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ovos_solver_openai_persona*"]
