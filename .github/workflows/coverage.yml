@@ -12,7 +12,10 @@ jobs:
     secrets: inherit
     with:
       python_version: '3.11'
-      coverage_source: 'ovos_solver_openai_persona'
+      coverage_source: 'ovos_openai_plugin'
       test_path: 'test/'
       install_extras: '.[test]'
       min_coverage: 0
+      # native tool-calling needs the tool contract (ToolCall, tools=, supports_tools);
+      # install the plugin-manager branch until it releases
+      pre_install_pip: "git+https://github.com/OpenVoiceOS/ovos-plugin-manager@feat/agent-tool-calling"
