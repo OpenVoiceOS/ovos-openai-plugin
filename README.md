@@ -5,7 +5,7 @@ This plugin is designed to leverage the **OpenAI API** for various functionaliti
 Specifically, this plugin provides:
 
   - `ovos-solver-openai-plugin` for general chat completions, primarily for usage with [ovos-persona](https://github.com/OpenVoiceOS/ovos-persona) (and in older ovos releases with [ovos-skill-fallback-chatgpt](https://www.google.com/search?q=))
-  - `ovos-solver-openai-rag-plugin` for Retrieval Augmented Generation using a compatible backend (like `ovos-persona-server`) as a knowledge source.
+  - `ovos-openai-rag-memory-plugin` for Retrieval Augmented Generation (as a persona memory plugin) using a compatible backend (like `ovos-persona-server`) as a knowledge source.
   - `ovos-dialog-transformer-openai-plugin` to rewrite OVOS dialogs just before TTS executes in [ovos-audio](https://github.com/OpenVoiceOS/ovos-audio)
   - `ovos-summarizer-openai-plugin` to summarize text, not used directly but provided for consumption by other plugins/skills
 
@@ -41,54 +41,60 @@ This plugins also provides a default "Remote LLama" demo persona, it points to a
 
 -----
 
-## RAG Solver Usage
+## RAG Memory Plugin
 
-The `ovos-solver-openai-rag-plugin` enables **Retrieval Augmented Generation (RAG)**. This means your OVOS assistant can answer questions by first searching for relevant information in a configured knowledge base (a "vector store" hosted by a compatible backend like `ovos-persona-server`), and then using an LLM to generate a coherent answer based on that retrieved context.
+`ovos-openai-rag-memory-plugin` (`PersonaServerRAGMemory`) enables **Retrieval
+Augmented Generation (RAG)** as a persona **memory plugin** rather than a solver. It
+hooks the persona's context-building step: before each turn it searches a vector
+store hosted by a compatible backend (e.g. [ovos-persona-server](https://github.com/OpenVoiceOS/ovos-persona-server))
+and injects the retrieved chunks into the conversation context. Your persona's normal
+chat engine then answers — so RAG composes with **any** chat backend instead of owning
+the chat round-trip.
 
-This is particularly useful for:
+This is useful for grounding answers in your own documentation / notes / data and
+reducing hallucinations.
 
-  * Answering questions about specific documentation, personal notes, or proprietary data.
-  * Reducing LLM hallucinations by grounding responses in factual, provided information.
+### How it works
 
-### How it Works
-
-1.  **Search**: When a user asks a question, the RAG solver first sends the query to the configured backend's vector store search endpoint.
-2.  **Retrieve**: The backend returns relevant text chunks (documents or passages) from your indexed data.
-3.  **Augment**: These retrieved chunks are then injected into the LLM's prompt, along with the user's original query and conversation history.
-4.  **Generate**: The LLM processes this augmented prompt and generates an answer, prioritizing the provided context.
+1. **Search** — `build_conversation_context` sends the query to the backend's vector
+   store search endpoint.
+2. **Retrieve** — the backend returns relevant text chunks.
+3. **Inject** — the chunks are added to the context per `inject_mode` (a separate
+   system message by default).
+4. **Generate** — the persona's chat engine answers with the augmented context.
 
 ### Configuration
 
-To use the RAG solver, you need to configure it in your `~/.config/ovos_persona/llm.json` file. You will need:
-
-1.  A **compatible OpenAI API backend running** (e.g., [ovos-persona-server](https://github.com/OpenVoiceOS/ovos-persona-server)) with a populated vector store.
-2.  The `vector_store_id` of your created vector store on that backend.
-3.  The `llm_model` and `llm_api_key` for the LLM that your chosen backend will use for chat completions.
-
-Here's an example `llm.json` configuration for a RAG persona:
+Set it as the persona's `memory_module` in `~/.config/ovos_persona/<persona>.json`.
+You need a compatible backend running with a populated vector store and its
+`vector_store_id`. Requires `ovos-persona` with memory-plugin config passing.
 
 ```json
 {
   "name": "My RAG Assistant",
-  "solvers": [
-    "ovos-solver-openai-rag-plugin"
-  ],
-  "ovos-solver-openai-rag-plugin": {
-    "persona_server_url": "http://localhost:8337/v1",  // URL of your OpenAI-compatible backend
-    "vector_store_id": "vs_your_vector_store_id_here", // <<< REPLACE THIS!
-    "max_num_results": 5,                             // Max text chunks to retrieve
-    "max_context_tokens": 2000,                       // Max tokens from retrieved context for LLM
-    "system_prompt_template": "You are a helpful assistant. Use the following context to answer the user's question. If the answer is not in the context, state that you don't know.\n\nContext:\n{context}\n\nQuestion:\n{question}",
-    "llm_model": "llama3.1:8b",                       // The LLM model name used by the backend
-    "llm_api_key": "sk-xxxx",                         // API key for the LLM on the backend (can be dummy for local setups)
-    "llm_temperature": 0.7,
-    "llm_top_p": 1.0,
-    "llm_max_tokens": 500,
-    "enable_memory": true,                            // Enable conversation history for RAG
-    "memory_size": 3                                  // Number of Q&A pairs to remember
+  "solvers": ["ovos-solver-openai-plugin"],
+  "memory_module": "ovos-openai-rag-memory-plugin",
+  "ovos-openai-rag-memory-plugin": {
+    "api_url": "http://localhost:8337/openai/v1",
+    "vector_store_id": "vs_your_vector_store_id_here",
+    "key": "sk-xxxx",
+    "system_prompt": "You are a helpful assistant.",
+    "inject_mode": "system",
+    "retrieval": { "max_num_results": 5, "min_score": null, "query_mode": "utterance" },
+    "context": { "include_sources": false },
+    "max_history": 10
   }
 }
 ```
+
+**Strategies** (all configurable):
+
+- `inject_mode` — `system` (separate system message, default), `system_prompt` (fold
+  into the persona's system prompt), `developer` (developer-role message), or `user`
+  (prepend to the user turn).
+- `retrieval.query_mode` — `utterance` (default) or `history` (fold recent turns into
+  the query); `max_num_results`, `min_score`.
+- `context` — `include_sources`, `chunk_prefix`, `chunk_separator`, `header`.
 
 -----
 

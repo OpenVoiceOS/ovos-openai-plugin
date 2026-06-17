@@ -48,7 +48,7 @@ def get_version():
 
 PERSONA_ENTRY_POINT = 'Remote Llama=ovos_solver_openai_persona:LLAMA_DEMO'
 PLUGIN_ENTRY_POINT = 'ovos-solver-openai-plugin=ovos_solver_openai_persona.engines:OpenAIChatCompletionsSolver'
-RAG_ENTRY_POINT = 'ovos-solver-openai-rag-plugin=ovos_solver_openai_persona.rag:OpenAIRAGSolver'
+RAG_MEMORY_ENTRY_POINT = 'ovos-openai-rag-memory-plugin=ovos_solver_openai_persona.rag_memory:PersonaServerRAGMemory'
 DIALOG_PLUGIN_ENTRY_POINT = 'ovos-dialog-transformer-openai-plugin=ovos_solver_openai_persona.dialog_transformers:OpenAIDialogTransformer'
 SUMMARIZER_ENTRY_POINT = 'ovos-summarizer-openai-plugin=ovos_solver_openai_persona.summarizer:OpenAISummarizer'
 
@@ -65,10 +65,11 @@ setup(
     zip_safe=True,
     keywords='ovos plugin utterance fallback query',
     entry_points={
-        'opm.solver.chat': [PLUGIN_ENTRY_POINT, RAG_ENTRY_POINT],
+        'opm.solver.chat': PLUGIN_ENTRY_POINT,
         "opm.transformer.dialog": DIALOG_PLUGIN_ENTRY_POINT,
         'opm.solver.summarization': SUMMARIZER_ENTRY_POINT,
-        "opm.plugin.persona": PERSONA_ENTRY_POINT
+        "opm.plugin.persona": PERSONA_ENTRY_POINT,
+        "opm.agents.memory": RAG_MEMORY_ENTRY_POINT,
     },
     install_requires=required("requirements.txt"),
     long_description=long_description,
