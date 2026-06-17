@@ -36,6 +36,9 @@ Homepage = "https://github.com/OpenVoiceOS/ovos-openai-plugin"
 [project.entry-points."opm.agents.chat"]
 "ovos-chat-openai-plugin" = "ovos_openai_plugin.chat:OpenAIChatEngine"
 
+[project.entry-points."opm.agents.memory"]
+"ovos-openai-rag-memory-plugin" = "ovos_openai_plugin.rag_memory:PersonaServerRAGMemory"
+
 [project.entry-points."opm.agents.summarizer"]
 "ovos-summarizer-openai-plugin" = "ovos_openai_plugin.summarizer:OpenAISummarizer"
 

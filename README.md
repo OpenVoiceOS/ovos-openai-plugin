@@ -8,7 +8,8 @@ This package provides:
 
 | Plugin | Entry point | Type | Purpose |
 |--------|-------------|------|---------|
-| `ovos-chat-openai-plugin` | `opm.agents.chat` | `ChatEngine` | Multi-turn chat agent for [ovos-persona](https://github.com/OpenVoiceOS/ovos-persona) |
+| `ovos-chat-openai-plugin` | `opm.agents.chat` | `ChatEngine` | Multi-turn chat agent (native tool/function calling) for [ovos-persona](https://github.com/OpenVoiceOS/ovos-persona) |
+| `ovos-openai-rag-memory-plugin` | `opm.agents.memory` | `AgentContextManager` | RAG memory: inject vector-store context from an [ovos-persona-server](https://github.com/OpenVoiceOS/ovos-persona-server) |
 | `ovos-summarizer-openai-plugin` | `opm.agents.summarizer` | `SummarizerEngine` | Summarize text for other plugins/skills |
 | `ovos-translate-openai-plugin` | `opm.lang.translate` | `LanguageTranslator` | LLM-backed text translation |
 | `ovos-lang-detect-openai-plugin` | `opm.lang.detect` | `LanguageDetector` | LLM-backed language detection |
@@ -53,6 +54,37 @@ Then say "Chat with {name_from_json}" to enable it; more details can be found in
 [ovos-persona](https://github.com/OpenVoiceOS/ovos-persona) README.
 
 This plugin also provides a default "Remote LLama" demo persona, pointing to a public server hosted by @goldyfruit.
+
+## RAG memory
+
+`ovos-openai-rag-memory-plugin` (`PersonaServerRAGMemory`) is a persona **memory
+plugin**: before each turn it searches a vector store on an
+[ovos-persona-server](https://github.com/OpenVoiceOS/ovos-persona-server) and injects
+the retrieved chunks into the conversation context — the persona's chat engine then
+answers. It composes with any chat backend instead of owning the chat round-trip.
+
+Set it as the persona's `memory_module`:
+
+```json
+{
+  "name": "kb-assistant",
+  "solvers": ["ovos-chat-openai-plugin"],
+  "memory_module": "ovos-openai-rag-memory-plugin",
+  "ovos-openai-rag-memory-plugin": {
+    "api_url": "http://localhost:8337/openai/v1",
+    "vector_store_id": "vs_...",
+    "inject_mode": "system",
+    "retrieval": {"max_num_results": 5}
+  }
+}
+```
+
+`inject_mode` selects how retrieved context enters the prompt: `system` (separate
+system message, default), `system_prompt`, `developer`, `user`, or `tool` (a
+synthetic `search_knowledge_base` tool-call result). Retrieval (`max_num_results`,
+`min_score`, `query_mode`) and context formatting are configurable — see the
+`rag_memory` module docstring. Requires `ovos-persona` that passes config to memory
+plugins.
 
 ## Dialog Transformer
 
