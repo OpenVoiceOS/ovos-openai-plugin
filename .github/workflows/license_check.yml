@@ -12,5 +12,6 @@ jobs:
     with:
       # marisa-trie is "MIT AND (BSD-2-Clause OR LGPL-2.1-or-later)" — a transitive
       # dep usable under BSD-2-Clause (safe as a library); the LGPL option trips the
-      # WeakCopyleft check. Anchor name + optional version separator (see tqdm regex bug).
-      exclude_packages: "^marisa-trie(?:[:=]|$)"
+      # WeakCopyleft check. Full-match the resolved requirement (name + version/sep),
+      # mirroring the workflow's baseline exclude pattern.
+      exclude_packages: "^marisa-trie([=<>!~ @;:].*)?$"
