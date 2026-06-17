@@ -19,6 +19,16 @@ A multi-turn conversational agent for ovos-persona. Implements:
 System prompt handling is controlled by `system_prompt` and `allow_system_prompts`
 (see [configuration](configuration.md)).
 
+### Tool / function calling
+
+`OpenAIChatEngine` sets `supports_tools = True`. Pass `ToolBox` object(s) (or OpenAI
+tool dicts) to `continue_chat(..., tools=...)`; the engine exposes them to the model
+and, when the model requests a tool, returns an assistant `AgentMessage` whose
+`tool_calls` (a list of `ToolCall`) are populated. Feed the results back as
+`MessageRole.TOOL` messages and call again to continue. The
+[`ovos-native-toolcall-loop`](https://github.com/OpenVoiceOS/ovos-agentic-loop)
+engine drives this loop for you; this plugin just needs to be the `brain`.
+
 ## `ovos-summarizer-openai-plugin` — Summarizer
 
 - **Entry point group:** `opm.agents.summarizer`

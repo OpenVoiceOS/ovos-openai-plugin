@@ -10,8 +10,9 @@ class OpenAIChatEngine(ChatEngine):
     """
     A ChatEngine for OpenAI-compatible Chat Completion APIs.
 
-    Handles multi-turn conversations, system prompt management, and streaming
-    responses (both raw tokens and complete sentences).
+    Handles multi-turn conversations, system prompt management, native
+    tool/function calling, and streaming responses (both raw tokens and complete
+    sentences).
 
     Configuration Dictionary (``config``):
         api_url (str): The endpoint URL (default: "https://api.openai.com/v1").
@@ -29,6 +30,9 @@ class OpenAIChatEngine(ChatEngine):
             {"role": "user", "content": "Orange."},
         ]
     """
+
+    # OpenAI-compatible servers support native function-calling.
+    supports_tools = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
@@ -87,7 +91,8 @@ class OpenAIChatEngine(ChatEngine):
     def continue_chat(self, messages: List[AgentMessage],
                       session_id: str = "default",
                       lang: Optional[str] = None,
-                      units: Optional[str] = None) -> AgentMessage:
+                      units: Optional[str] = None,
+                      tools: Any = None) -> AgentMessage:
         """
         Generate a complete response message based on the provided chat history.
 
@@ -96,13 +101,15 @@ class OpenAIChatEngine(ChatEngine):
             session_id (str): Identifier for the session (default: "default").
             lang (Optional[str]): BCP-47 language code (e.g., "en-us").
             units (Optional[str]): Preferred unit system (e.g., "metric", "imperial").
+            tools: ToolBox object(s) and/or OpenAI tool dicts to expose to the
+                model. When provided, the returned message may carry ``tool_calls``.
 
         Returns:
-            AgentMessage: The generated response message from the assistant.
+            AgentMessage: The generated response message from the assistant
+            (with ``tool_calls`` populated when the model requests tools).
         """
         messages = self.validate_messages(messages)
-        return AgentMessage(role=MessageRole.ASSISTANT,
-                            content=self.api.request(messages))
+        return self.api.chat_message(messages, tools=tools)
 
     def stream_tokens(self, messages: List[AgentMessage],
                       session_id: str = "default",

@@ -57,6 +57,24 @@ class TestNormalizeMessages:
         assert out == [{"role": "system", "content": "s"},
                        {"role": "user", "content": "u"}]
 
+    def test_assistant_tool_calls_serialized(self):
+        from ovos_plugin_manager.templates.agents import ToolCall
+        msgs = [AgentMessage(role=MessageRole.ASSISTANT, content="",
+                             tool_calls=[ToolCall(id="c1", name="calc", arguments={"a": 1})])]
+        out = OpenAIChatCompletions.normalize_messages(msgs)
+        assert out[0]["content"] is None  # tool-call-only assistant turn
+        tc = out[0]["tool_calls"][0]
+        assert tc["id"] == "c1" and tc["type"] == "function"
+        assert tc["function"]["name"] == "calc"
+        assert json.loads(tc["function"]["arguments"]) == {"a": 1}
+
+    def test_tool_result_message_serialized(self):
+        msgs = [AgentMessage(role=MessageRole.TOOL, content="2",
+                             tool_call_id="c1", name="calc")]
+        out = OpenAIChatCompletions.normalize_messages(msgs)
+        assert out[0] == {"role": "tool", "content": "2",
+                          "tool_call_id": "c1", "name": "calc"}
+
 
 class TestRequest:
     @patch("ovos_openai_plugin.api.requests.post")
@@ -96,6 +114,52 @@ class TestRequest:
         api = OpenAIChatCompletions(api_url="http://x/v1")
         with pytest.raises(RequestException):
             api.request([AgentMessage(role=MessageRole.USER, content="hi")])
+
+
+class TestChatMessageAndTools:
+    @patch("ovos_openai_plugin.api.requests.post")
+    def test_chat_message_parses_tool_calls(self, mock_post):
+        mock_post.return_value = _json_response({"choices": [{"message": {
+            "content": None,
+            "tool_calls": [{"id": "c1", "type": "function",
+                            "function": {"name": "calc",
+                                         "arguments": '{"a": 1, "b": 2}'}}],
+        }}]})
+        api = OpenAIChatCompletions(api_url="http://x/v1")
+        msg = api.chat_message([AgentMessage(role=MessageRole.USER, content="2?")])
+        assert msg.role == MessageRole.ASSISTANT
+        assert msg.content == ""
+        assert msg.tool_calls[0].id == "c1"
+        assert msg.tool_calls[0].name == "calc"
+        assert msg.tool_calls[0].arguments == {"a": 1, "b": 2}
+
+    @patch("ovos_openai_plugin.api.requests.post")
+    def test_chat_message_plain_answer(self, mock_post):
+        mock_post.return_value = _json_response(
+            {"choices": [{"message": {"content": "hello"}}]})
+        api = OpenAIChatCompletions(api_url="http://x/v1")
+        msg = api.chat_message([AgentMessage(role=MessageRole.USER, content="hi")])
+        assert msg.content == "hello"
+        assert msg.tool_calls is None
+
+    @patch("ovos_openai_plugin.api.requests.post")
+    def test_tools_added_to_payload_from_dicts(self, mock_post):
+        mock_post.return_value = _json_response(
+            {"choices": [{"message": {"content": "ok"}}]})
+        api = OpenAIChatCompletions(api_url="http://x/v1")
+        specs = [{"type": "function", "function": {"name": "calc", "parameters": {}}}]
+        api.chat_message([AgentMessage(role=MessageRole.USER, content="hi")], tools=specs)
+        sent = json.loads(mock_post.call_args.kwargs["data"])
+        assert sent["tools"] == specs
+
+    @patch("ovos_openai_plugin.api.requests.post")
+    def test_no_tools_key_when_none(self, mock_post):
+        mock_post.return_value = _json_response(
+            {"choices": [{"message": {"content": "ok"}}]})
+        api = OpenAIChatCompletions(api_url="http://x/v1")
+        api.chat_message([AgentMessage(role=MessageRole.USER, content="hi")])
+        sent = json.loads(mock_post.call_args.kwargs["data"])
+        assert "tools" not in sent
 
 
 class TestStreaming:

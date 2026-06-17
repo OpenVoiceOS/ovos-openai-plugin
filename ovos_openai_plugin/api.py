@@ -2,12 +2,26 @@ import json
 from typing import Any, Dict, Optional, List, Union, Iterable
 
 import requests
-from ovos_plugin_manager.templates.agents import AgentMessage
+from ovos_plugin_manager.templates.agents import AgentMessage, MessageRole, ToolCall
+from ovos_plugin_manager.templates.agent_tools import ToolBox
 from ovos_utils.log import LOG
 from requests import RequestException
 
 # Type alias for cleaner signatures
 MessageList = Union[List[AgentMessage], List[Dict[str, str]]]
+
+
+def _parse_arguments(raw: Any) -> Dict[str, Any]:
+    """Parse OpenAI tool-call ``arguments`` (a JSON string) into a dict."""
+    if isinstance(raw, dict):
+        return raw
+    if not raw:
+        return {}
+    try:
+        return json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        LOG.warning(f"could not parse tool_call arguments: {raw!r}")
+        return {}
 
 
 class OpenAIChatCompletions:
@@ -42,34 +56,58 @@ class OpenAIChatCompletions:
         self.model = model or "gpt-4o-mini"
 
     @staticmethod
-    def normalize_messages(messages: MessageList) -> List[Dict[str, str]]:
+    def normalize_messages(messages: MessageList) -> List[Dict[str, Any]]:
         """
-        Convert a list of AgentMessage objects or dicts into the standard OpenAI format.
+        Convert AgentMessage objects (or dicts) into the OpenAI message format.
+
+        Assistant ``tool_calls`` and ``MessageRole.TOOL`` results are serialized to
+        their OpenAI wire shapes so multi-turn tool loops round-trip correctly.
 
         Args:
             messages (MessageList): A list containing either AgentMessage objects
                                     or dictionaries.
 
         Returns:
-            List[Dict[str, str]]: A list of dictionaries with 'role' and 'content' keys.
+            List[Dict[str, Any]]: OpenAI-format message dicts.
         """
-        return [
-            {"role": m.role.value, "content": m.content} if isinstance(m, AgentMessage) else m
-            for m in messages
-        ]
+        out: List[Dict[str, Any]] = []
+        for m in messages:
+            if not isinstance(m, AgentMessage):
+                out.append(m)  # already a dict
+                continue
+            d: Dict[str, Any] = {"role": m.role.value, "content": m.content or ""}
+            if m.role == MessageRole.TOOL:
+                if m.tool_call_id:
+                    d["tool_call_id"] = m.tool_call_id
+                if m.name:
+                    d["name"] = m.name
+            if m.tool_calls:
+                d["tool_calls"] = [
+                    {"id": tc.id, "type": "function",
+                     "function": {"name": tc.name, "arguments": json.dumps(tc.arguments)}}
+                    for tc in m.tool_calls
+                ]
+                # OpenAI expects content=null on an assistant turn that only calls tools
+                if not m.content:
+                    d["content"] = None
+            out.append(d)
+        return out
 
-    def _get_common_payload(self, messages: MessageList, model: Optional[str] = None) -> Dict[str, Any]:
+    def _get_common_payload(self, messages: MessageList, model: Optional[str] = None,
+                            tools: Any = None) -> Dict[str, Any]:
         """
         Construct the common JSON payload for API requests.
 
         Args:
             messages (MessageList): The conversation history.
             model (Optional[str]): The model to use, overriding the default.
+            tools: ToolBox object(s) and/or OpenAI tool dicts to expose to the
+                model; coerced via ``ToolBox.normalize_tools``.
 
         Returns:
             Dict[str, Any]: The configuration dictionary for the API body.
         """
-        return {
+        payload = {
             "model": model or self.model,
             "messages": self.normalize_messages(messages),
             "max_tokens": self.config.get("max_tokens", 300),
@@ -80,12 +118,32 @@ class OpenAIChatCompletions:
             "presence_penalty": self.config.get("presence_penalty", 0),
             "stop": self.config.get("stop_token")
         }
+        normalized_tools = ToolBox.normalize_tools(tools)
+        if normalized_tools:
+            payload["tools"] = normalized_tools
+        return payload
 
     def _headers(self) -> Dict[str, str]:
         headers = {"Content-Type": "application/json"}
         if self.key:
             headers["Authorization"] = "Bearer " + self.key
         return headers
+
+    def _post_json(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """POST ``payload`` and return the parsed JSON response, raising on error."""
+        try:
+            resp = requests.post(self.url, headers=self._headers(),
+                                 data=json.dumps(payload), timeout=(10, 60))
+            resp.raise_for_status()
+            response = resp.json()
+        except json.JSONDecodeError as e:
+            raise RequestException("Failed to decode API response.") from e
+        except requests.HTTPError as err:
+            raise RequestException(f"HTTP error: {err}") from err
+
+        if "error" in response:
+            raise RequestException(response["error"])
+        return response
 
     def request(self, messages: MessageList, model: Optional[str] = None) -> str:
         """
@@ -101,22 +159,39 @@ class OpenAIChatCompletions:
         Raises:
             RequestException: If the request fails or the API returns an error.
         """
-        payload = self._get_common_payload(messages, model)
-
-        try:
-            resp = requests.post(self.url, headers=self._headers(),
-                                 data=json.dumps(payload), timeout=(10, 60))
-            resp.raise_for_status()
-            response = resp.json()
-        except json.JSONDecodeError as e:
-            raise RequestException("Failed to decode API response.") from e
-        except requests.HTTPError as err:
-            raise RequestException(f"HTTP error: {err}") from err
-
-        if "error" in response:
-            raise RequestException(response["error"])
-
+        response = self._post_json(self._get_common_payload(messages, model))
         return response["choices"][0]["message"]["content"]
+
+    def chat_message(self, messages: MessageList, model: Optional[str] = None,
+                     tools: Any = None) -> AgentMessage:
+        """
+        Send a chat completion request and return the full assistant message.
+
+        Unlike :meth:`request` (which returns only text), this preserves any
+        ``tool_calls`` the model requests, so callers can run a tool loop.
+
+        Args:
+            messages (MessageList): The conversation history.
+            model (Optional[str]): The model identifier (overrides default).
+            tools: ToolBox object(s) and/or OpenAI tool dicts to expose.
+
+        Returns:
+            AgentMessage: assistant message; ``tool_calls`` is populated when the
+            model requested tools (``content`` may then be empty).
+        """
+        response = self._post_json(self._get_common_payload(messages, model, tools))
+        msg = response["choices"][0]["message"]
+        tool_calls = None
+        if msg.get("tool_calls"):
+            tool_calls = [
+                ToolCall(id=tc.get("id") or "",
+                         name=tc["function"]["name"],
+                         arguments=_parse_arguments(tc["function"].get("arguments")))
+                for tc in msg["tool_calls"]
+            ]
+        return AgentMessage(role=MessageRole.ASSISTANT,
+                            content=msg.get("content") or "",
+                            tool_calls=tool_calls)
 
     def streaming_request(self, messages: MessageList, model: Optional[str] = None) -> Iterable[str]:
         """

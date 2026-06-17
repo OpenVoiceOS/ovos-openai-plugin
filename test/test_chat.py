@@ -49,13 +49,30 @@ class TestValidateMessages:
 
 
 class TestChat:
-    @patch("ovos_openai_plugin.api.OpenAIChatCompletions.request", return_value="the answer")
+    @patch("ovos_openai_plugin.api.OpenAIChatCompletions.chat_message",
+           return_value=AgentMessage(role=MessageRole.ASSISTANT, content="the answer"))
     def test_continue_chat_returns_assistant_message(self, _mock):
         eng = OpenAIChatEngine({"api_url": "http://x/v1"})
         msg = eng.continue_chat([_u("question")])
         assert isinstance(msg, AgentMessage)
         assert msg.role == MessageRole.ASSISTANT
         assert msg.content == "the answer"
+
+    def test_supports_tools(self):
+        assert OpenAIChatEngine.supports_tools is True
+
+    @patch("ovos_openai_plugin.api.OpenAIChatCompletions.chat_message")
+    def test_continue_chat_forwards_tools_and_returns_tool_calls(self, mock_cm):
+        from ovos_plugin_manager.templates.agents import ToolCall
+        mock_cm.return_value = AgentMessage(
+            role=MessageRole.ASSISTANT, content="",
+            tool_calls=[ToolCall(id="c1", name="calc", arguments={"a": 1})])
+        eng = OpenAIChatEngine({"api_url": "http://x/v1"})
+        specs = [{"type": "function", "function": {"name": "calc"}}]
+        out = eng.continue_chat([_u("2?")], tools=specs)
+        assert out.tool_calls[0].name == "calc"
+        # tools forwarded through to the api layer
+        assert mock_cm.call_args.kwargs.get("tools") == specs
 
     @patch("ovos_openai_plugin.api.OpenAIChatCompletions.streaming_request",
            return_value=iter(["Hello ", "world"]))

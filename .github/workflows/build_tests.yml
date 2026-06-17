@@ -14,3 +14,6 @@ jobs:
       python_versions: '["3.10","3.11","3.12","3.13","3.14"]'
       install_extras: 'test'
       test_path: 'test'
+      # Native tool-calling needs the tool contract (ToolCall, tools=, supports_tools,
+      # ToolBox.normalize_tools). Install the plugin-manager branch until it releases.
+      pre_install_pip: "git+https://github.com/OpenVoiceOS/ovos-plugin-manager@feat/agent-tool-calling"
