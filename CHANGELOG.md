@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.8a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.8a1) (2026-06-20)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a8...2.0.8a1)
+
+**Breaking changes:**
+
+- refactor!: migrate to OPM agents framework [\#54](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/54) ([JarbasAl](https://github.com/JarbasAl))
+
+**Merged pull requests:**
+
+- fix\(ci\): correct release version\_file path to ovos\_openai\_plugin [\#62](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/62) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [2.0.7a8](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a8) (2026-06-15)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a7...2.0.7a8)
