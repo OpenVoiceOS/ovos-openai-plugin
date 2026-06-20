@@ -12,7 +12,7 @@ jobs:
     secrets: inherit
     with:
       python_version: '3.11'
-      coverage_source: 'ovos_solver_openai_persona'
+      coverage_source: 'ovos_openai_plugin'
       test_path: 'test/'
       install_extras: '.[test]'
       min_coverage: 0

@@ -2,15 +2,16 @@
 
 Proves:
   1. An utterance flows through the real OVOS intent pipeline, hits the
-     persona pipeline plugin, reaches the ``OpenAIChatCompletionsSolver``,
-     which makes a genuine OpenAI-compatible HTTP round-trip and produces a
-     ``speak`` message with non-empty text.
-  2. Per-session memory records the USER turn keyed by session_id.
+     persona pipeline plugin, reaches the ``OpenAIChatEngine`` agent plugin
+     (``ovos-chat-openai-plugin``), which makes a genuine OpenAI-compatible
+     HTTP round-trip and produces a ``speak`` message with non-empty text.
+  2. Per-session short-term memory records the USER turn keyed by session_id.
 
 Hermetic: a local FastAPI server implements the OpenAI ``/chat/completions``
 contract (both plain JSON and SSE streaming) and returns a deterministic
-reply.  The solver is pointed at ``http://127.0.0.1:<port>/v1`` with a dummy
-key, so there is no real OpenAI API, no network egress, and no key required.
+reply.  The chat engine is pointed at ``http://127.0.0.1:<port>/v1`` with a
+dummy key, so there is no real OpenAI API, no network egress, and no key
+required.
 """
 import json
 import os
@@ -21,9 +22,6 @@ import time
 import urllib.request
 
 import pytest
-
-import ovoscope
-import ovos_persona
 
 import uvicorn
 from fastapi import FastAPI, Request
@@ -51,7 +49,8 @@ _REPLY = "I am SrvBot and I am happy to help."
 _CHUNKS = ["I am ", "SrvBot ", "and ", "I am ", "happy ", "to ", "help."]
 
 PERSONA_NAME = "SrvBot"
-PLUGIN_ID = "ovos-solver-openai-plugin"
+# the new OPM agents chat engine entry-point (replaces the deprecated solver)
+PLUGIN_ID = "ovos-chat-openai-plugin"
 
 
 # ---------------------------------------------------------------------------
@@ -132,7 +131,7 @@ def openai_base_url():
 # ---------------------------------------------------------------------------
 
 def _make_personas_dir(base_url: str) -> str:
-    """Write a persona JSON pointing the OpenAI solver at the local stub."""
+    """Write a persona JSON pointing the OpenAI chat engine at the local stub."""
     tmpdir = tempfile.mkdtemp()
     persona = {
         "name": PERSONA_NAME,
@@ -142,7 +141,6 @@ def _make_personas_dir(base_url: str) -> str:
             "key": "not-needed",
             "model": PERSONA_NAME,
             "system_prompt": "You are SrvBot.",
-            "enable_memory": True,
         },
     }
     with open(os.path.join(tmpdir, f"{PERSONA_NAME}.json"), "w") as fh:
@@ -164,7 +162,6 @@ def mc(openai_base_url):
         "persona": {
             "personas_path": personas_path,
             "default_persona": PERSONA_NAME,
-            "short-term-memory": True,
             "handle_fallback": True,
             "ignore_plugin_personas": True,
         }
