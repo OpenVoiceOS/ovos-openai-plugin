@@ -13,7 +13,7 @@ jobs:
     secrets: inherit
     with:
       branch: 'dev'
-      version_file: 'ovos_solver_openai_persona/version.py'
+      version_file: 'ovos_openai_plugin/version.py'
       update_changelog: true
       publish_prerelease: true
       propose_release: true
