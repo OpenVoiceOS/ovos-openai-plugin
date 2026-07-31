@@ -19,7 +19,7 @@ These are forwarded to the Chat Completions request body:
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | `max_tokens` | int | `300` | Maximum number of tokens to generate. |
-| `temperature` | float | `0.5` | Sampling temperature (0–2). |
+| `temperature` | float | `0.5` | Sampling temperature (0 to 2). |
 | `top_p` | float | `0.2` | Nucleus sampling probability mass. |
 | `frequency_penalty` | float | `0` | Penalize repeated tokens (−2 to 2). |
 | `presence_penalty` | float | `0` | Encourage new topics (−2 to 2). |
@@ -49,3 +49,6 @@ These are forwarded to the Chat Completions request body:
   "temperature": 0.5
 }
 ```
+
+---
+[Home](../README.md) · [Available plugins →](plugins.md)
