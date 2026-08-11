@@ -21,7 +21,7 @@ chat agent. Personas are JSON files placed in `~/.config/ovos_persona/`.
 ```
 
 - The `solvers` list contains the **plugin name** to use as the conversational handler. The key is kept
-  for backward compatibility with older persona files; it now accepts agent (chat engine) plugins.
+  for backward compatibility with older persona files. It now accepts agent (chat engine) plugins.
 - A top-level key matching the plugin name holds that plugin's configuration.
 
 Enable it at runtime by saying *"Chat with My Local LLM"*.
@@ -51,3 +51,6 @@ Older personas referencing the removed `ovos-solver-openai-plugin` must be updat
 pipeline, points the chat engine at a local OpenAI-compatible stub server (no network, no key), drives a
 real `recognizer_loop:utterance` through the pipeline, and asserts a `speak` message is produced and the
 user turn is recorded in per-session memory.
+
+---
+[← Available plugins](plugins.md) · [Home](../README.md)

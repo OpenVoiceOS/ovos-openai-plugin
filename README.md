@@ -1,8 +1,9 @@
 # <img src='https://raw.githack.com/FortAwesome/Font-Awesome/master/svgs/solid/robot.svg' card_color='#40DBB0' width='50' height='50' style='vertical-align:bottom'/> OVOS OpenAI Plugin
 
-Leverages the [OpenAI Chat Completions API](https://platform.openai.com/docs/api-reference/chat) to provide
-OpenAI-compatible plugins for OpenVoiceOS. Any server exposing the OpenAI `/chat/completions` contract
-(OpenAI, [ollama](https://ollama.com), llama.cpp, vLLM, LocalAI, ...) can be used by pointing `api_url` at its `/v1` base.
+This package uses the [OpenAI Chat Completions API](https://platform.openai.com/docs/api-reference/chat) to
+provide OpenAI-compatible plugins for OpenVoiceOS. It works with any server that exposes the OpenAI
+`/chat/completions` contract, such as OpenAI, [ollama](https://ollama.com), llama.cpp, vLLM, or LocalAI.
+Point `api_url` at the server's `/v1` base to use it.
 
 This package provides:
 
@@ -15,12 +16,12 @@ This package provides:
 | `ovos-lang-detect-openai-plugin` | `opm.lang.detect` | `LanguageDetector` | LLM-backed language detection |
 | `ovos-dialog-transformer-openai-plugin` | `opm.transformer.dialog` | `DialogTransformer` | Rewrite OVOS dialogs just before TTS in [ovos-audio](https://github.com/OpenVoiceOS/ovos-audio) |
 
-> ⚠️ **Breaking change** — solver plugins are [deprecated in ovos-plugin-manager](https://github.com/OpenVoiceOS/ovos-plugin-manager/pull/365).
+> **Breaking change:** solver plugins are [deprecated in ovos-plugin-manager](https://github.com/OpenVoiceOS/ovos-plugin-manager/pull/365).
 > This release migrates from the legacy `QuestionSolver`/`ChatMessageSolver` to the new
 > [agents framework](https://github.com/OpenVoiceOS/ovos-plugin-manager) (`AbstractAgentEngine`).
-> The old `ovos-solver-openai-plugin` entry point and the `OpenAIChatCompletionsSolver` /
-> `OpenAIPersonaSolver` classes have been removed. Personas must now reference `ovos-chat-openai-plugin`,
-> and this release requires `ovos-plugin-manager>=2.2.3a1` and `ovos-persona>=0.9.0a1`.
+> The old `ovos-solver-openai-plugin` entry point and the `OpenAIChatCompletionsSolver` and
+> `OpenAIPersonaSolver` classes have been removed. Personas must now reference `ovos-chat-openai-plugin`.
+> This release requires `ovos-plugin-manager>=2.2.3a1` and `ovos-persona>=0.9.0a1`.
 
 ## Install
 
@@ -47,21 +48,21 @@ To create your own persona using an OpenAI-compatible server, create a `.json` i
 }
 ```
 
-> The `solvers` key name is kept for backwards compatibility with persona JSON files; it now accepts
+> The `solvers` key name is kept for backwards compatibility with persona JSON files. It now accepts
 > agent plugin names (chat engines) in addition to legacy solvers.
 
-Then say "Chat with {name_from_json}" to enable it; more details can be found in the
-[ovos-persona](https://github.com/OpenVoiceOS/ovos-persona) README.
+Say "Chat with {name_from_json}" to enable it. See the
+[ovos-persona](https://github.com/OpenVoiceOS/ovos-persona) README for more details.
 
 This plugin also provides a default "Remote LLama" demo persona, pointing to a public server hosted by @goldyfruit.
 
 ## RAG memory
 
-`ovos-openai-rag-memory-plugin` (`PersonaServerRAGMemory`) is a persona **memory
-plugin**: before each turn it searches a vector store on an
+`ovos-openai-rag-memory-plugin` (`PersonaServerRAGMemory`) is a persona memory
+plugin. Before each turn, it searches a vector store on an
 [ovos-persona-server](https://github.com/OpenVoiceOS/ovos-persona-server) and injects
-the retrieved chunks into the conversation context — the persona's chat engine then
-answers. It composes with any chat backend instead of owning the chat round-trip.
+the retrieved chunks into the conversation context. The persona's chat engine then
+answers. This plugin composes with any chat backend instead of owning the chat round-trip.
 
 Set it as the persona's `memory_module`:
 
@@ -82,9 +83,9 @@ Set it as the persona's `memory_module`:
 `inject_mode` selects how retrieved context enters the prompt: `system` (separate
 system message, default), `system_prompt`, `developer`, `user`, or `tool` (a
 synthetic `search_knowledge_base` tool-call result). Retrieval (`max_num_results`,
-`min_score`, `query_mode`) and context formatting are configurable — see the
-`rag_memory` module docstring. Requires `ovos-persona` that passes config to memory
-plugins.
+`min_score`, `query_mode`) and context formatting are configurable. See the
+`rag_memory` module docstring for details. This feature requires an `ovos-persona`
+version that passes config to memory plugins.
 
 ## Dialog Transformer
 
@@ -109,7 +110,7 @@ To enable this plugin, add the following to your `mycroft.conf`:
 }
 ```
 
-> 💡 the dialog will be appended after `rewrite_prompt` for the actual query
+> The actual dialog text is appended after `rewrite_prompt` in the request.
 
 ## Direct Usage
 
@@ -151,10 +152,10 @@ print(summary.summarize("a very long document ..."))
 
 ## Remote Persona / Proxies
 
-You can run any persona behind an OpenAI-compatible server via
-[ovos-persona-server](https://github.com/OpenVoiceOS/ovos-persona-server). This offloads the workload to a
-standalone server, either for performance or to keep API keys in a single safe place. Then just configure this
-plugin to point to your persona server as if it were OpenAI.
+You can run any persona behind an OpenAI-compatible server with
+[ovos-persona-server](https://github.com/OpenVoiceOS/ovos-persona-server). This moves the workload to a
+standalone server, either for performance or to keep API keys in a single safe place. Then configure this
+plugin to point at your persona server as if it were OpenAI.
 
 ## Documentation
 
