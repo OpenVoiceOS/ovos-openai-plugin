@@ -26,6 +26,7 @@ test = [
     "pytest>=7.0.0,<9",
     "pytest-timeout>=2.0.0",
     "ovos-persona>=0.9.0a1",
+    "ovos-spec-tools",
     "fastapi",
     "uvicorn",
 ]
