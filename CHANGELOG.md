@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.9a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.9a1) (2026-08-14)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.8a2...2.0.9a1)
+
+**Merged pull requests:**
+
+- fix: e2e persona test asserts on legacy 'speak' instead of canonical ovos.utterance.speak [\#67](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/67) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [2.0.8a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.8a2) (2026-07-31)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.8a1...2.0.8a2)
