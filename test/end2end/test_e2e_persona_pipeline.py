@@ -29,6 +29,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 
 from ovos_bus_client.message import Message
 from ovos_bus_client.session import Session, SessionManager
+from ovos_spec_tools.messages import SpecMessage
 
 from ovoscope import (
     PERSONA_PIPELINE,
@@ -213,14 +214,14 @@ class TestOpenAIPersonaSpeaksThroughPipeline:
         messages = _drive_utterance(mc, sess, "who are you", timeout=30)
 
         msg_types = [m.msg_type for m in messages]
-        speak_msgs = [m for m in messages if m.msg_type == "speak"]
+        speak_msgs = [m for m in messages if m.msg_type == SpecMessage.SPEAK]
 
         assert speak_msgs, (
-            f"Expected at least one 'speak' message; got msg_types: {msg_types}"
+            f"Expected at least one '{SpecMessage.SPEAK}' message; got msg_types: {msg_types}"
         )
         spoken = speak_msgs[0].data.get("utterance", "")
         assert spoken.strip(), (
-            f"'speak' message had an empty utterance; data={speak_msgs[0].data}"
+            f"'{SpecMessage.SPEAK}' message had an empty utterance; data={speak_msgs[0].data}"
         )
 
     def test_spoken_text_matches_stub_reply(self, mc):
@@ -232,7 +233,7 @@ class TestOpenAIPersonaSpeaksThroughPipeline:
         spoken = " ".join(
             m.data.get("utterance", "")
             for m in messages
-            if m.msg_type == "speak"
+            if m.msg_type == SpecMessage.SPEAK
         )
         assert "SrvBot" in spoken, (
             f"Expected the stub reply in spoken output, got: {spoken!r}"
