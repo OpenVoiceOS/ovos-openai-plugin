@@ -1,7 +1,8 @@
 # Available plugins
 
-This package ships five plugins, all backed by a shared OpenAI Chat Completions client
-(`ovos_openai_plugin.api.OpenAIChatCompletions`).
+This package ships six plugins. Five are backed by a shared OpenAI Chat Completions client
+(`ovos_openai_plugin.api.OpenAIChatCompletions`); the RAG memory plugin instead talks to an
+OpenAI-compatible vector-stores search API.
 
 ## `ovos-chat-openai-plugin`: Chat engine
 
@@ -28,6 +29,16 @@ When the model requests a tool, it returns an assistant `AgentMessage` whose
 `MessageRole.TOOL` messages and call again to continue. The
 [`ovos-native-toolcall-loop`](https://github.com/OpenVoiceOS/ovos-agentic-loop)
 engine drives this loop for you. This plugin only needs to be the `brain`.
+
+## `ovos-openai-rag-memory-plugin`: RAG memory
+
+- **Entry point group:** `opm.agents.memory`
+- **Class:** `ovos_openai_plugin.rag_memory.PersonaServerRAGMemory` (`AgentContextManager`)
+
+A persona memory plugin: before each turn, searches a vector store on an OpenAI-compatible server and
+injects the retrieved chunks into the conversation context that the chat engine sees. See
+[RAG memory](rag-memory.md) for the full configuration reference, how to build the vector store it
+searches, and its failure modes.
 
 ## `ovos-summarizer-openai-plugin`: Summarizer
 
