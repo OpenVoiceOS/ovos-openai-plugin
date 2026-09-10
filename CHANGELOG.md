@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.11a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a1) (2026-09-10)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.10a1...2.0.11a1)
+
+**Merged pull requests:**
+
+- fix: read vector-store search hits whose content is a list of text parts [\#73](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/73) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.0.10a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.10a1) (2026-08-14)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.9a1...2.0.10a1)
