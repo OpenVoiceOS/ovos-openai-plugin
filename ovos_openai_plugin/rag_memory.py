@@ -82,6 +82,19 @@ DEFAULT_USER_TEMPLATE = "{header}\n\nContext:\n{context}\n\nQuestion: {utterance
 _VALID_MODES = {"system", "developer", "system_prompt", "user", "tool"}
 
 
+def _content_text(content: Any) -> str:
+    """Flatten a search hit's ``content`` to text.
+
+    The OpenAI vector-store search response carries ``content`` as a list of
+    ``{"type": "text", "text": ...}`` parts; a bare string is accepted too.
+    """
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        return " ".join(p.get("text", "") for p in content if isinstance(p, dict)).strip()
+    return ""
+
+
 class PersonaServerRAGMemory(AgentContextManager):
     """Persona memory plugin that augments context with RAG hits from a persona-server."""
 
@@ -153,7 +166,7 @@ class PersonaServerRAGMemory(AgentContextManager):
         resp.raise_for_status()
         hits: List[Tuple[str, str, float]] = []
         for item in resp.json().get("data", []):
-            content = item.get("content")
+            content = _content_text(item.get("content"))
             if not content:
                 continue
             if self.min_score is not None and item.get("score", 0.0) < self.min_score:
