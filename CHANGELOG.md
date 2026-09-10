@@ -1,16 +1,122 @@
 # Changelog
 
-## [2.0.6a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.6a1) (2025-11-05)
+## [2.0.11a3](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a3) (2026-09-10)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/V2.0.5...2.0.6a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a2...2.0.11a3)
 
 **Merged pull requests:**
 
-- Update requirements.txt [\#44](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/44) ([JarbasAl](https://github.com/JarbasAl))
+- docs: document the RAG tools [\#71](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/71) ([JarbasAl](https://github.com/JarbasAl))
 
-## [V2.0.5](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/V2.0.5) (2025-07-31)
+## [2.0.11a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a2) (2026-09-10)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.5...V2.0.5)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a1...2.0.11a2)
+
+**Merged pull requests:**
+
+- build: allow ovos-config 3.x [\#72](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/72) ([JarbasAl](https://github.com/JarbasAl))
+
+## [2.0.11a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a1) (2026-09-10)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.10a1...2.0.11a1)
+
+**Merged pull requests:**
+
+- fix: read vector-store search hits whose content is a list of text parts [\#73](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/73) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.0.10a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.10a1) (2026-08-14)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.9a1...2.0.10a1)
+
+**Merged pull requests:**
+
+- fix: allow ovos-config 2.x [\#68](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/68) ([JarbasAl](https://github.com/JarbasAl))
+
+## [2.0.9a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.9a1) (2026-08-14)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.8a2...2.0.9a1)
+
+**Merged pull requests:**
+
+- fix: e2e persona test asserts on legacy 'speak' instead of canonical ovos.utterance.speak [\#67](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/67) ([JarbasAl](https://github.com/JarbasAl))
+
+## [2.0.8a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.8a2) (2026-07-31)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.8a1...2.0.8a2)
+
+**Merged pull requests:**
+
+- docs: rewrite README in Simplified Technical English [\#65](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/65) ([JarbasAl](https://github.com/JarbasAl))
+
+## [2.0.8a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.8a1) (2026-06-20)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a8...2.0.8a1)
+
+**Breaking changes:**
+
+- refactor!: migrate to OPM agents framework [\#54](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/54) ([JarbasAl](https://github.com/JarbasAl))
+
+**Merged pull requests:**
+
+- fix\(ci\): correct release version\_file path to ovos\_openai\_plugin [\#62](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/62) ([JarbasAl](https://github.com/JarbasAl))
+
+## [2.0.7a8](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a8) (2026-06-15)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a7...2.0.7a8)
+
+**Merged pull requests:**
+
+- test: e2e — OpenAI solver against live persona-server [\#56](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/56) ([JarbasAl](https://github.com/JarbasAl))
+
+## [2.0.7a7](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a7) (2026-06-14)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a6...2.0.7a7)
+
+**Merged pull requests:**
+
+- docs: add NGI0 Commons Fund attribution [\#57](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/57) ([JarbasAl](https://github.com/JarbasAl))
+- fix: handle SSE \[DONE\] terminator, empty keep-alives, and comment lines [\#55](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/55) ([jsilter](https://github.com/jsilter))
+
+## [2.0.7a6](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a6) (2026-01-30)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a5...2.0.7a6)
+
+**Merged pull requests:**
+
+- chore\(deps\): update pilosus/action-pip-license-checker action to v3 [\#53](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/53) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [2.0.7a5](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a5) (2026-01-30)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a4...2.0.7a5)
+
+## [2.0.7a4](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a4) (2026-01-30)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a2...2.0.7a4)
+
+**Merged pull requests:**
+
+- chore\(deps\): update actions/setup-python action to v6 - autoclosed [\#52](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/52) ([renovate[bot]](https://github.com/apps/renovate))
+- chore\(deps\): update actions/checkout action to v6 [\#51](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/51) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [2.0.7a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a2) (2025-12-19)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.7a1...2.0.7a2)
+
+**Merged pull requests:**
+
+- chore\(deps\): update dependency python to 3.14 [\#47](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/47) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [2.0.7a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.7a1) (2025-12-18)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/V2.0.6...2.0.7a1)
+
+**Merged pull requests:**
+
+- chore: Configure Renovate [\#46](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/46) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [V2.0.6](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/V2.0.6) (2025-11-05)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.6...V2.0.6)
 
 
 
