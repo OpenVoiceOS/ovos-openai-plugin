@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.11a3](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a3) (2026-09-10)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a2...2.0.11a3)
+
+**Merged pull requests:**
+
+- docs: document the RAG tools [\#71](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/71) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [2.0.11a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a2) (2026-09-10)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a1...2.0.11a2)
