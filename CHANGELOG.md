@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.11a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a2) (2026-09-10)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a1...2.0.11a2)
+
+**Merged pull requests:**
+
+- build: allow ovos-config 3.x [\#72](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/72) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [2.0.11a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a1) (2026-09-10)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.10a1...2.0.11a1)
