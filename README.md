@@ -83,9 +83,11 @@ Set it as the persona's `memory_module`:
 `inject_mode` selects how retrieved context enters the prompt: `system` (separate
 system message, default), `system_prompt`, `developer`, `user`, or `tool` (a
 synthetic `search_knowledge_base` tool-call result). Retrieval (`max_num_results`,
-`min_score`, `query_mode`) and context formatting are configurable. See the
-`rag_memory` module docstring for details. This feature requires an `ovos-persona`
-version that passes config to memory plugins.
+`min_score`, `query_mode`) and context formatting are configurable. This feature
+requires an `ovos-persona` version that passes config to memory plugins. See
+[docs/rag-memory.md](docs/rag-memory.md) for the full configuration reference, how
+to build the vector store this plugin searches (files + embeddings, local or
+hosted), and its failure modes.
 
 ## Dialog Transformer
 
@@ -162,6 +164,7 @@ plugin to point at your persona server as if it were OpenAI.
 - [Configuration reference](docs/configuration.md)
 - [Available plugins](docs/plugins.md)
 - [Persona integration](docs/persona-integration.md)
+- [RAG memory](docs/rag-memory.md)
 
 ---
 
