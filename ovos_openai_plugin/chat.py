@@ -1,6 +1,7 @@
 from typing import Dict, Optional, List, Iterable, Any
 
 from ovos_plugin_manager.templates.agents import ChatEngine, AgentMessage, MessageRole
+from ovos_utils.log import LOG
 from sentence_stream import SentenceBoundaryDetector
 
 from ovos_openai_plugin.api import OpenAIChatCompletions
@@ -51,6 +52,7 @@ class OpenAIChatEngine(ChatEngine):
         )
         self.system_prompt = self.config.get("system_prompt")
         self.allow_system = self.config.get("allow_system_prompts") or False
+        self._warned_dropped_system = False
 
     def validate_messages(self, messages: List[AgentMessage]) -> List[AgentMessage]:
         """
@@ -69,6 +71,17 @@ class OpenAIChatEngine(ChatEngine):
             List[AgentMessage]: The processed list of messages ready for the API.
         """
         if not self.allow_system:
+            dropped = [m for m in messages if m.role == MessageRole.SYSTEM]
+            if dropped and not self._warned_dropped_system:
+                # Context a memory plugin recalled arrives as a system message, and
+                # dropping it silently looks like a persona that simply did not
+                # remember. Said once per engine, not once per request.
+                self._warned_dropped_system = True
+                LOG.warning(
+                    f"dropped {len(dropped)} system message(s) before the request: "
+                    f"'allow_system_prompts' is off. Context a memory plugin injects as a "
+                    f"system message is discarded with it; set 'allow_system_prompts', or "
+                    f"set the memory plugin's 'inject_mode' to one this engine keeps.")
             messages = [m for m in messages if m.role != MessageRole.SYSTEM]
 
         if not messages:
