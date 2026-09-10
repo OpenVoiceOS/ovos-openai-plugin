@@ -93,3 +93,33 @@ class TestInjectModes:
         msgs = mem.build_conversation_context("q?", "s1")
         ctx = " ".join(m.content for m in msgs if m.role == MessageRole.SYSTEM)
         assert "keep" in ctx and "drop" not in ctx
+
+
+class TestSearchContentShapes:
+    """The OpenAI vector-store search response carries ``content`` as a list of
+    ``{"type": "text", "text": ...}`` parts; older servers sent a bare string."""
+
+    def _hits(self, data):
+        resp = MagicMock()
+        resp.raise_for_status.return_value = None
+        resp.json.return_value = {"data": data}
+        mem = PersonaServerRAGMemory(_CFG)
+        with patch("ovos_openai_plugin.rag_memory.requests.post", return_value=resp):
+            return mem._search("q")
+
+    def test_content_parts_list(self):
+        hits = self._hits([{"content": [{"type": "text", "text": "cats are fluffy"}],
+                            "file_id": "f0", "score": 0.9}])
+        assert hits == [("cats are fluffy", "f0", 0.9)]
+
+    def test_content_parts_joined(self):
+        hits = self._hits([{"content": [{"type": "text", "text": "a"}, {"type": "text", "text": "b"}],
+                            "file_id": "f0", "score": 0.5}])
+        assert hits == [("a b", "f0", 0.5)]
+
+    def test_content_bare_string_still_accepted(self):
+        hits = self._hits([{"content": "plain", "file_id": "f1", "score": 0.7}])
+        assert hits == [("plain", "f1", 0.7)]
+
+    def test_empty_parts_skipped(self):
+        assert self._hits([{"content": [], "file_id": "f2", "score": 0.7}]) == []
