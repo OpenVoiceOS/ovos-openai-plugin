@@ -62,6 +62,17 @@ def test_only_an_absent_setting_is_silent():
     log.warning.assert_not_called()
 
 
+@pytest.mark.parametrize("value", [[], None, [{"role": "user", "content": "other"}]])
+def test_the_conversation_cannot_be_replaced_or_removed(value):
+    """`extra_params: {"messages": []}` used to send a request with no
+    conversation; the key is refused and reported, and the rest still applies."""
+    with patch("ovos_openai_plugin.api.LOG") as log:
+        payload = _api(extra_params={"messages": value, "top_k": 40})._get_common_payload(MESSAGES)
+    assert payload["messages"] == _api()._get_common_payload(MESSAGES)["messages"]
+    assert payload["top_k"] == 40
+    log.warning.assert_called_once()
+
+
 @pytest.mark.parametrize("empty", [None, {}])
 def test_an_absent_or_empty_setting_changes_nothing(empty):
     assert _api(extra_params=empty)._get_common_payload(MESSAGES) == _api()._get_common_payload(MESSAGES)

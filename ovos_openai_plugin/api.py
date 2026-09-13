@@ -141,6 +141,12 @@ class OpenAIChatCompletions:
                         type(extra).__name__)
             return payload
         for key, value in extra.items():
+            if key == "messages":
+                # The conversation is the one field a provider parameter can
+                # never stand in for: replaced, the request goes out with no
+                # conversation at all, and removed, it is not a request.
+                LOG.warning("ignoring extra_params[%r]: the conversation is not a parameter", key)
+                continue
             if value is None:
                 # how a config removes a field this method would otherwise
                 # always send, for a provider that rejects it

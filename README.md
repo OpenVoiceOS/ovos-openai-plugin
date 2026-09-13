@@ -51,6 +51,28 @@ To create your own persona using an OpenAI-compatible server, create a `.json` i
 > The `solvers` key name is kept for backwards compatibility with persona JSON files. It now accepts
 > agent plugin names (chat engines) in addition to legacy solvers.
 
+An OpenAI-compatible endpoint is not OpenAI, and the parameters that matter differ per provider and
+per model. `extra_params` is a mapping merged into the request body last, so it can add a field the
+plugin has no setting for (`reasoning_effort`, `thinking`, `top_k`, `repetition_penalty`...) or
+override one it always sends (`max_tokens`, `temperature`, `stop`...). A key set to `null` removes
+the field from the request instead of sending it, for a provider that rejects it. The conversation
+itself (`messages`) cannot be replaced or removed this way; that key is ignored and logged. A value
+that is not a mapping is ignored and logged rather than taking the assistant down mid-conversation.
+
+```json
+{
+  "ovos-chat-openai-plugin": {
+    "api_url": "https://llama.smartgic.io/v1",
+    "model": "llama3.1:8b",
+    "extra_params": {
+      "reasoning_effort": "none",
+      "top_k": 40,
+      "stop": null
+    }
+  }
+}
+```
+
 Say "Chat with {name_from_json}" to enable it. See the
 [ovos-persona](https://github.com/OpenVoiceOS/ovos-persona) README for more details.
 
