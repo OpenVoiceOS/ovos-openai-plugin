@@ -121,6 +121,38 @@ class OpenAIChatCompletions:
         normalized_tools = ToolBox.normalize_tools(tools)
         if normalized_tools:
             payload["tools"] = normalized_tools
+
+        # Providers behind an OpenAI-compatible endpoint accept parameters this
+        # payload has no field for, and the useful ones differ per provider and
+        # per model: reasoning_effort, thinking, top_k, repetition_penalty and
+        # so on. Without a way through, using one means either editing this
+        # method or patching it at runtime. Anything here is merged last, so a
+        # deployment can also override a default above when a provider reads it
+        # differently. A key set to None is dropped rather than sent, which is
+        # how a config removes a field this method would otherwise always send.
+        # Only None means "unset". A falsy value of the wrong type -- [], "",
+        # 0, False -- is a mistake worth reporting, and `or {}` would turn
+        # every one of them into silence.
+        extra = self.config.get("extra_params")
+        if extra is None:
+            extra = {}
+        if not isinstance(extra, dict):
+            LOG.warning("ignoring extra_params: expected a dict, got %s",
+                        type(extra).__name__)
+            return payload
+        for key, value in extra.items():
+            if key == "messages":
+                # The conversation is the one field a provider parameter can
+                # never stand in for: replaced, the request goes out with no
+                # conversation at all, and removed, it is not a request.
+                LOG.warning("ignoring extra_params[%r]: the conversation is not a parameter", key)
+                continue
+            if value is None:
+                # how a config removes a field this method would otherwise
+                # always send, for a provider that rejects it
+                payload.pop(key, None)
+            else:
+                payload[key] = value
         return payload
 
     def _headers(self) -> Dict[str, str]:
