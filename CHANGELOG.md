@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.11a4](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a4) (2026-09-18)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a3...2.0.11a4)
+
+**Merged pull requests:**
+
+- feat: let configuration add provider parameters to the request payload [\#75](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/75) ([goldyfruit](https://github.com/goldyfruit))
+- Update dependency pytest to v9 [\#58](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/58) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [2.0.11a3](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a3) (2026-09-10)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a2...2.0.11a3)
