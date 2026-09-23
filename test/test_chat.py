@@ -91,3 +91,30 @@ class TestChat:
         assert "How are you?" in joined
         # each yielded item should be a complete sentence (ends with punctuation)
         assert all(s.strip()[-1] in ".?!" for s in sentences)
+
+
+class TestStreamSentencesFlushesTheTail:
+    """The last sentence of a stream is spoken even when it does not end in
+    punctuation. The 2.0.x question-solver (``stream_chat_utterances``) yielded
+    only chunks ending in . ! ? : or a newline and never flushed the rest, so a
+    reply ending in a quoted sentence ('."') lost it."""
+
+    @patch("ovos_openai_plugin.api.OpenAIChatCompletions.streaming_request")
+    def test_a_quoted_last_sentence_is_spoken(self, mock_stream):
+        mock_stream.return_value = iter(["Try Language Buddy.", " Ask it:",
+                                         ' "Practice five cafe phrases', '."'])
+        eng = OpenAIChatEngine({"api_url": "http://x/v1"})
+        joined = " ".join(eng.stream_sentences([_u("hi")]))
+        assert joined.endswith('"Practice five cafe phrases."')
+
+    @patch("ovos_openai_plugin.api.OpenAIChatCompletions.streaming_request")
+    def test_a_reply_without_final_punctuation_is_spoken(self, mock_stream):
+        mock_stream.return_value = iter(["Hello", " there"])
+        eng = OpenAIChatEngine({"api_url": "http://x/v1"})
+        assert list(eng.stream_sentences([_u("hi")])) == ["Hello there"]
+
+    @patch("ovos_openai_plugin.api.OpenAIChatCompletions.streaming_request")
+    def test_a_trailing_number_is_spoken(self, mock_stream):
+        mock_stream.return_value = iter(["It costs 5."])
+        eng = OpenAIChatEngine({"api_url": "http://x/v1"})
+        assert " ".join(eng.stream_sentences([_u("hi")])) == "It costs 5."
