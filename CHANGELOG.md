@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.12a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.12a1) (2026-09-24)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a4...2.0.12a1)
+
+**Merged pull requests:**
+
+- test: stream\_sentences speaks the last sentence without final punctuation [\#81](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/81) ([goldyfruit](https://github.com/goldyfruit))
+- fix: say so when the engine drops context it was given [\#78](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/78) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.0.11a4](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.11a4) (2026-09-18)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a3...2.0.11a4)
