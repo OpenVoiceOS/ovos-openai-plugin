@@ -35,6 +35,19 @@ class OpenAIChatEngine(ChatEngine):
     # OpenAI-compatible servers support native function-calling.
     supports_tools = True
 
+    # A chain with no sort_order is sorted by ascending priority, and
+    # ChatEngine declares no default, so a chain that holds this engine could
+    # not be read at all. 50 is the neutral value the solver and transformer
+    # templates use.
+    #
+    # It does not yet order this engine against a plugin that asks for a later
+    # place. AbstractSolver.__init__ runs self.priority = priority with its own
+    # default of 50, so an instance of a legacy solver reads 50 whatever its
+    # class declares. ovos-solver-failure-plugin declares 9999 and its instance
+    # still reads 50 today. Ordering holds once that constructor stops shadowing
+    # the class attribute.
+    priority = 50
+
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
         Initialize the OpenAI Chat Engine.
