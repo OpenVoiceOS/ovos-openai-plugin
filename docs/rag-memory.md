@@ -86,7 +86,7 @@ Set the plugin as the persona's `memory_module`, alongside a chat engine in `sol
 | `key` | str | `None` | Bearer token sent as `Authorization: Bearer <key>`. Omit for local servers that do not require authentication. |
 | `max_history` | int | `10` | Number of prior messages retained per session and replayed into the context on each turn. `0` disables retention. |
 | `retrieval.max_num_results` | int | `5` | Maximum number of chunks requested from the search call. |
-| `retrieval.min_score` | float | `None` | Drop hits scoring below this value. `None` keeps every hit the server returns. |
+| `retrieval.min_score` | float | `None` | Drop hits scoring below this value. `None` keeps every hit the server returns. The score is a similarity, higher is closer, as the OpenAI API and `ovos-persona-server` report it. |
 | `retrieval.query_mode` | str | `"utterance"` | `"utterance"` searches with the current turn only; `"history"` folds prior user turns into the query. |
 | `retrieval.query_history_turns` | int | `3` | Number of prior user turns folded into the query when `query_mode` is `"history"`. |
 | `context.header` | str | *(built-in instruction)* | Sentence introducing the retrieved context to the model. |
@@ -111,6 +111,14 @@ Set the plugin as the persona's `memory_module`, alongside a chat engine in `sol
 - `tool` — presents the context as the result of a tool call: a synthetic assistant `tool_calls` turn
   (a `search_knowledge_base` call carrying the query) followed by a `MessageRole.TOOL` message carrying
   the chunks, just before the user utterance. Requires a chat engine/backend with tool-call support.
+
+The chat engine must keep the message that carries the context. `ovos-chat-openai-plugin` drops system messages that it did not write unless its `allow_system_prompts` is `true`, and that is not its default. With that engine, use `inject_mode: "user"`, or set `allow_system_prompts: true` in the engine config. A persona on `ovos-persona-server` was asked "What is the name of the office cat?", a fact that only a file in the vector store holds:
+
+| Config | Answer |
+| --- | --- |
+| `inject_mode: "system"`, `allow_system_prompts` not set | `I don't have any information about an office cat. ...` |
+| `inject_mode: "user"` | `The name of the office cat is Bartolomeu.` |
+| `inject_mode: "system"`, `allow_system_prompts: true` | `The name of the office cat is Bartolomeu.` |
 
 If no hits are returned, `context` is empty and none of the above injection happens — only the base
 system prompt (if any) and the user utterance are sent, unchanged.
