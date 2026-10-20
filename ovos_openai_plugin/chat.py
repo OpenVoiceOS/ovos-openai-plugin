@@ -80,8 +80,11 @@ class OpenAIChatEngine(ChatEngine):
                 LOG.warning(
                     f"dropped {len(dropped)} system message(s) before the request: "
                     f"'allow_system_prompts' is off. Context a memory plugin injects as a "
-                    f"system message is discarded with it; set 'allow_system_prompts', or "
-                    f"set the memory plugin's 'inject_mode' to one this engine keeps.")
+                    f"system message is discarded with it; set 'allow_system_prompts', or, "
+                    f"for a retrieval memory (lexical, local-rag, the passages of a "
+                    f"composite, or ovos-openai-rag-memory-plugin), set its 'inject_mode' "
+                    f"to 'user' and move its 'system_prompt' to this engine's "
+                    f"'system_prompt'.")
             messages = [m for m in messages if m.role != MessageRole.SYSTEM]
 
         if not messages:

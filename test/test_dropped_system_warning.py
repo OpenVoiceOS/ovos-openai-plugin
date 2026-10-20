@@ -36,6 +36,17 @@ def test_warns_when_it_drops_a_system_message():
     assert "allow_system_prompts" in said and "inject_mode" in said, said
 
 
+def test_hint_limits_inject_mode_to_retrieval_memories():
+    with patch("ovos_openai_plugin.chat.LOG") as log:
+        _engine().validate_messages(_messages())
+    said = " ".join(str(c) for c in log.warning.call_args_list)
+    assert ("set 'allow_system_prompts', or, for a retrieval memory (lexical, "
+            "local-rag, the passages of a composite, or ovos-openai-rag-memory-plugin), "
+            "set its 'inject_mode' to 'user' and move its 'system_prompt' to this "
+            "engine's 'system_prompt'.") in said, said
+    assert "one this engine keeps" not in said, said
+
+
 def test_warns_once_per_engine():
     engine = _engine()
     with patch("ovos_openai_plugin.chat.LOG") as log:
