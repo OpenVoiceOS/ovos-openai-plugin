@@ -52,6 +52,12 @@ Set the plugin as the persona's `memory_module`, alongside a chat engine in `sol
 {
   "name": "kb-assistant",
   "solvers": ["ovos-chat-openai-plugin"],
+  "ovos-chat-openai-plugin": {
+    "api_url": "http://localhost:8080/v1",
+    "key": "sk-none",
+    "model": "my-model",
+    "allow_system_prompts": true
+  },
   "memory_module": "ovos-openai-rag-memory-plugin",
   "ovos-openai-rag-memory-plugin": {
     "api_url": "http://localhost:8337/openai/v1",
@@ -76,6 +82,27 @@ Set the plugin as the persona's `memory_module`, alongside a chat engine in `sol
   }
 }
 ```
+
+### With `ovos-chat-openai-plugin`
+
+`ovos-chat-openai-plugin` removes every system message unless
+`allow_system_prompts` is `true`. The default `inject_mode` is `system`, so the
+retrieved context is removed with it. With the configuration above and
+`allow_system_prompts` off, the plugin's `system_prompt` and the retrieved context are two system messages, and
+the log says `dropped 2 system message(s) before the request`.
+
+Set `allow_system_prompts` to `true`, or set `inject_mode` to `user`. With
+`inject_mode` set to `user` and `allow_system_prompts` off, the plugin's own
+`system_prompt` is still removed, and the log says `dropped 1 system message(s)`.
+
+A run in which the vector store search returned one chunk about a bakery gave these
+answers to "When does the Pixel Bakery close on Saturday?":
+
+| `allow_system_prompts` | `inject_mode` | Answer |
+|---|---|---|
+| `false` | `system` | I don't have any information about a specific "Pixel Bakery" or its operating hours. Can you please provide more context or clarify which Pixel Bakery you are referring to? I'll do my best to help. |
+| `true` | `system` | The Pixel Bakery closes at 14:30 on Saturdays. |
+| `false` | `user` | The Pixel Bakery closes at 14:30 on Saturdays. |
 
 ## Configuration reference
 

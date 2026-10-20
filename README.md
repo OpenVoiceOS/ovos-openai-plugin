@@ -87,6 +87,12 @@ Set it as the persona's `memory_module`:
 {
   "name": "kb-assistant",
   "solvers": ["ovos-chat-openai-plugin"],
+  "ovos-chat-openai-plugin": {
+    "api_url": "http://localhost:8080/v1",
+    "key": "sk-none",
+    "model": "my-model",
+    "allow_system_prompts": true
+  },
   "memory_module": "ovos-openai-rag-memory-plugin",
   "ovos-openai-rag-memory-plugin": {
     "api_url": "http://localhost:8337/openai/v1",
@@ -96,6 +102,10 @@ Set it as the persona's `memory_module`:
   }
 }
 ```
+
+`ovos-chat-openai-plugin` removes system messages unless `allow_system_prompts`
+is `true`. The default `inject_mode` adds the retrieved context as a system
+message, so without that setting the model never sees the context.
 
 `inject_mode` selects how retrieved context enters the prompt: `system` (separate
 system message, default), `system_prompt`, `developer`, `user`, or `tool` (a
