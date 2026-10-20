@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.13a3](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.13a3) (2026-10-20)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.13a2...2.0.13a3)
+
+**Merged pull requests:**
+
+- fix: scope the dropped-system-message hint to retrieval memories [\#91](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/91) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- docs: set allow\_system\_prompts in the RAG memory recipes [\#90](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/90) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.0.13a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.13a2) (2026-10-20)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.13a1...2.0.13a2)
