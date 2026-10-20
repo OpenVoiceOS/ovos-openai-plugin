@@ -16,17 +16,13 @@ This package provides:
 | `ovos-lang-detect-openai-plugin` | `opm.lang.detect` | `LanguageDetector` | LLM-backed language detection |
 | `ovos-dialog-transformer-openai-plugin` | `opm.transformer.dialog` | `DialogTransformer` | Rewrite OVOS dialogs just before TTS in [ovos-audio](https://github.com/OpenVoiceOS/ovos-audio) |
 
-> **Breaking change:** solver plugins are [deprecated in ovos-plugin-manager](https://github.com/OpenVoiceOS/ovos-plugin-manager/pull/365).
-> This release migrates from the legacy `QuestionSolver`/`ChatMessageSolver` to the new
-> [agents framework](https://github.com/OpenVoiceOS/ovos-plugin-manager) (`AbstractAgentEngine`).
-> The old `ovos-solver-openai-plugin` entry point and the `OpenAIChatCompletionsSolver` and
-> `OpenAIPersonaSolver` classes have been removed. Personas must now reference `ovos-chat-openai-plugin`.
-> This release requires `ovos-plugin-manager>=2.2.3a1` and `ovos-persona>=0.9.0a1`.
+The plugins use the [agents framework](https://github.com/OpenVoiceOS/ovos-plugin-manager) of
+ovos-plugin-manager (`AbstractAgentEngine`). A persona names the chat engine `ovos-chat-openai-plugin`.
 
 ## Install
 
 ```bash
-pip install ovos-openai-plugin
+pip install --pre ovos-openai-plugin
 ```
 
 ## Persona Usage
@@ -48,8 +44,7 @@ To create your own persona using an OpenAI-compatible server, create a `.json` i
 }
 ```
 
-> The `solvers` key name is kept for backwards compatibility with persona JSON files. It now accepts
-> agent plugin names (chat engines) in addition to legacy solvers.
+> The `solvers` key lists chat engine plugins. It also accepts solver plugins, which are deprecated.
 
 An OpenAI-compatible endpoint is not OpenAI, and the parameters that matter differ per provider and
 per model. `extra_params` is a mapping merged into the request body last, so it can add a field the
