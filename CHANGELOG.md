@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.13a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.13a1) (2026-10-20)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.12a1...2.0.13a1)
+
+**Closed issues:**
+
+- Suggest DemonRoute as a documented example endpoint for the OpenAI plugin [\#85](https://github.com/OpenVoiceOS/ovos-openai-plugin/issues/85)
+- Stable 2.0.6 drops the last sentence of a streamed reply when it lacks final punctuation [\#80](https://github.com/OpenVoiceOS/ovos-openai-plugin/issues/80)
+
+**Merged pull requests:**
+
+- fix: allow ovos-plugin-manager 3 [\#86](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/86) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.0.12a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.12a1) (2026-09-24)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.11a4...2.0.12a1)
