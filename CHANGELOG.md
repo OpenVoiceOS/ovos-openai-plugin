@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.13a2](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.13a2) (2026-10-20)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.13a1...2.0.13a2)
+
+**Merged pull requests:**
+
+- docs: describe the latest alpha only [\#88](https://github.com/OpenVoiceOS/ovos-openai-plugin/pull/88) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.0.13a1](https://github.com/OpenVoiceOS/ovos-openai-plugin/tree/2.0.13a1) (2026-10-20)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-openai-plugin/compare/2.0.12a1...2.0.13a1)
