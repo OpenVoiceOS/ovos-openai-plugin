@@ -20,8 +20,7 @@ chat agent. Personas are JSON files placed in `~/.config/ovos_persona/`.
 }
 ```
 
-- The `solvers` list contains the **plugin name** to use as the conversational handler. The key is kept
-  for backward compatibility with older persona files. It now accepts agent (chat engine) plugins.
+- The `solvers` list contains the **plugin name** of the chat engine that answers.
 - A top-level key matching the plugin name holds that plugin's configuration.
 
 Enable it at runtime by saying *"Chat with My Local LLM"*.
@@ -36,13 +35,9 @@ remains stateless. To pick a different memory backend, set `"memory_module"` in 
 
 ## Requirements
 
-This plugin targets the OPM **agents framework**, which deprecates solver plugins:
-
-- `ovos-plugin-manager >= 2.2.3a1`
-- `ovos-persona >= 0.9.0a1`
-
-Older personas referencing the removed `ovos-solver-openai-plugin` must be updated to
-`ovos-chat-openai-plugin`.
+This plugin uses the OPM **agents framework**. Solver plugins are deprecated, so a persona names the
+chat engine `ovos-chat-openai-plugin`. Install `ovos-persona` next to the plugin with
+`pip install --pre ovos-persona`.
 
 ## End-to-end test
 
