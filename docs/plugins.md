@@ -1,8 +1,9 @@
 # Available plugins
 
-This package ships six plugins. Five are backed by a shared OpenAI Chat Completions client
+This package ships seven plugins. Five are backed by a shared OpenAI Chat Completions client
 (`ovos_openai_plugin.api.OpenAIChatCompletions`); the RAG memory plugin instead talks to an
-OpenAI-compatible vector-stores search API.
+OpenAI-compatible vector-stores search API, and the text embeddings plugin to an OpenAI-compatible
+embeddings API.
 
 ## `ovos-chat-openai-plugin`: Chat engine
 
@@ -39,6 +40,14 @@ A persona memory plugin: before each turn, searches a vector store on an OpenAI-
 injects the retrieved chunks into the conversation context that the chat engine sees. See
 [RAG memory](rag-memory.md) for the full configuration reference, how to build the vector store it
 searches, and its failure modes.
+
+## `ovos-openai-embeddings-plugin`: Text embeddings
+
+- **Entry point group:** `opm.embeddings.text`
+- **Class:** `ovos_openai_plugin.embeddings.OpenAIEmbeddings` (`TextEmbedder`)
+
+Turns text into vectors through an OpenAI-compatible `/v1/embeddings` endpoint, many texts per
+request. See [Text embeddings](embeddings.md).
 
 ## `ovos-summarizer-openai-plugin`: Summarizer
 

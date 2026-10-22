@@ -192,6 +192,7 @@ plugin to point at your persona server as if it were OpenAI.
 - [Available plugins](docs/plugins.md)
 - [Persona integration](docs/persona-integration.md)
 - [RAG memory](docs/rag-memory.md)
+- [Text embeddings](docs/embeddings.md)
 
 ---
 

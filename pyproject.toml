@@ -13,6 +13,7 @@ requires-python = ">=3.10"
 keywords = ["ovos", "plugin", "openai", "llm", "agent"]
 dependencies = [
     "requests",
+    "numpy",
     "ovos-plugin-manager>=2.7.0a1",
     "ovos-utils>=0.3.5,<1.0.0",
     "ovos-config>=0.2.0,<4.0.0",
@@ -36,6 +37,9 @@ Homepage = "https://github.com/OpenVoiceOS/ovos-openai-plugin"
 
 [project.entry-points."opm.agents.chat"]
 "ovos-chat-openai-plugin" = "ovos_openai_plugin.chat:OpenAIChatEngine"
+
+[project.entry-points."opm.embeddings.text"]
+"ovos-openai-embeddings-plugin" = "ovos_openai_plugin.embeddings:OpenAIEmbeddings"
 
 [project.entry-points."opm.agents.memory"]
 "ovos-openai-rag-memory-plugin" = "ovos_openai_plugin.rag_memory:PersonaServerRAGMemory"
